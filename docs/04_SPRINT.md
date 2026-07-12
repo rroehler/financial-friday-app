@@ -16,7 +16,7 @@ Build a solid project foundation before adding new features.
 
 # Sprint 002 - Budget Foundation
 
-## Sprint Goal
+## Goal
 
 Build the foundation of the Budget Engine.
 
