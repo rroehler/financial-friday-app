@@ -33,3 +33,6 @@
 
 ### Changed
 - Replaced the Accounts placeholder with a functional interface.
+
+### Added
+- UI Guidelines documentation
