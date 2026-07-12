@@ -37,7 +37,7 @@
 ### Added
 - UI Guidelines documentation
 
-####v0.2.1 - Manage Account Balances
+#### v0.2.1 - Manage Account Balances
 
 ### Added
 - Firestore-backed account editing
