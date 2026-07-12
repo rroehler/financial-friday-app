@@ -19,3 +19,17 @@
 
 ### Fixed
 - Firebase login issue on GitHub Pages.
+
+---
+
+## v0.2.0 - Accounts
+
+### Added
+- Accounts page
+- Cash and Debt cards
+- Animated card transitions
+- Edit Balance modal
+- Responsive account layout
+
+### Changed
+- Replaced the Accounts placeholder with a functional interface.
