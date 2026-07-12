@@ -37,5 +37,18 @@
 ### Added
 - UI Guidelines documentation
 
+- ## v0.2.1 - Manage Account Balances
+
+### Added
+- Firestore-backed account editing
+- Live account balance updates
+- Shared account data model
+- Balance validation
+- Save state and error handling
+
+### Changed
+- Overview refreshes automatically after account updates.
+- Account totals refresh immediately after saving.
+
 ### Documentation
 - Added Product Identity document.
