@@ -1,29 +1,60 @@
-Epic
+# Product Backlog
 
-Accounts
+## Epic: Accounts
+- View account balances
+- Edit account balances
+- CSV import
+- Import history
+- Account reconciliation
 
-Stories
+## Epic: Weekly Tracker
+- Weekly balance snapshot
+- Weekly win
+- Weekly adjustment
+- Financial Friday history
 
-Edit balances
+## Epic: Monthly Budget
+- Budget vs. Actual
+- Category drill-down
+- Monthly summaries
+- Budget rollover
 
-Import CSV
+## Epic: Debt Plan
+- Debt payoff milestones
+- Quarterly goals
+- Payoff calculator
+- Interest tracking
 
-Hide closed accounts
+## Epic: Financial Coach
+- Weekly recommendations
+- Spending insights
+- Debt payment suggestions
+- Cash flow recommendations
+- Goal progress
+- Financial health score
 
-Reconcile balances
+## Epic: Automation
+- Plaid integration
+- Automatic transaction import
+- Auto categorization
+- Recurring transaction detection
 
---------------------
+## Epic: Goals
+- Emergency fund tracker
+- Checking account goal
+- Debt-free progress
+- Net worth milestones
 
-Epic
+## Epic: Reports
+- Net worth history
+- Spending trends
+- Income trends
+- Debt trends
 
-Coach
-
-Stories
-
-Weekly recommendations
-
-Payoff suggestions
-
-Spending alerts
-
-Cash flow prediction
+## Future Ideas
+- Investment tracking
+- Mortgage payoff planner
+- Shared household budgeting
+- Tax planning
+- Subscription tracking
+- AI chat assistant
