@@ -42,8 +42,8 @@ Financial Planning
 
 ### 🚧 User Interaction
 
-- [ ] Complete UI Consistency Pass *(In Progress)*
-- [ ] Add Expand All / Collapse All Controls
+- [x] Complete UI Consistency Pass
+- [x] Add Expand All / Collapse All Controls
 - [ ] Edit Planned Amounts
 - [ ] Save Plan Changes to Firestore
 
