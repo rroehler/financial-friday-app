@@ -2,7 +2,7 @@
 
 ## What is Financial Friday?
 
-Financial Friday is a personal financial operating system.
+Financial Friday is a personal financial operating system. A financial planning platform.
 
 It helps people make better financial decisions through clear recommendations, structured planning, and long-term financial coaching.
 
