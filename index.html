@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Financial Friday</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+
+<div id="app">
+
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <div class="login-title">
+        <p class="mark">Financial Friday</p>
+        <p>Log in to your dashboard</p>
+      </div>
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" id="login-btn">Log in</button>
+      <p class="login-error" id="login-error"></p>
+    </div>
+  </div>
+
+  <div class="app-shell" id="app-shell">
+    <div class="topbar">
+      <div class="greeting">
+        <p id="greeting-time">Good evening</p>
+        <p>Ryan</p>
+      </div>
+      <button class="logout-btn" id="logout-btn">Log out</button>
+    </div>
+
+    <div class="content">
+
+      <div class="tab-view active" id="view-overview">
+        <div class="hero">
+          <p class="label">NET WORTH</p>
+          <p class="value" id="hero-networth">$0</p>
+          <p class="delta" id="hero-delta"></p>
+        </div>
+        <div class="trend-wrap"><canvas id="trend-chart"></canvas></div>
+
+        <div class="metric-grid">
+          <div class="metric-card">
+            <p class="m-label">Cash</p>
+            <p class="m-value" id="metric-cash">$0</p>
+          </div>
+          <div class="metric-card">
+            <p class="m-label">Debt</p>
+            <p class="m-value" id="metric-debt">$0</p>
+          </div>
+        </div>
+
+        <p class="section-label">TOP SPENDING THIS MONTH</p>
+        <div id="top-spending-list"></div>
+      </div>
+
+      <div class="tab-view" id="view-accounts">
+        <div class="placeholder-view">
+          <i class="ti ti-building-bank" aria-hidden="true"></i>
+          <p>Accounts tab &mdash; coming in the next build step</p>
+        </div>
+      </div>
+
+      <div class="tab-view" id="view-budget">
+        <div class="placeholder-view">
+          <i class="ti ti-calendar-dollar" aria-hidden="true"></i>
+          <p>Monthly Budget &mdash; coming soon</p>
+        </div>
+      </div>
+
+      <div class="tab-view" id="view-debt">
+        <div class="placeholder-view">
+          <i class="ti ti-trending-down" aria-hidden="true"></i>
+          <p>Debt Plan &mdash; coming soon</p>
+        </div>
+      </div>
+
+      <div class="tab-view" id="view-weekly">
+        <div class="placeholder-view">
+          <i class="ti ti-calendar-check" aria-hidden="true"></i>
+          <p>Weekly Tracker &mdash; coming soon</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item active" data-view="overview">
+        <i class="ti ti-chart-donut-2" aria-hidden="true"></i>
+        <span>Overview</span>
+      </button>
+      <button class="nav-item" data-view="accounts">
+        <i class="ti ti-building-bank" aria-hidden="true"></i>
+        <span>Accounts</span>
+      </button>
+      <button class="nav-item" data-view="budget">
+        <i class="ti ti-calendar-dollar" aria-hidden="true"></i>
+        <span>Budget</span>
+      </button>
+      <button class="nav-item" data-view="debt">
+        <i class="ti ti-trending-down" aria-hidden="true"></i>
+        <span>Debt plan</span>
+      </button>
+      <button class="nav-item" data-view="weekly">
+        <i class="ti ti-calendar-check" aria-hidden="true"></i>
+        <span>Weekly</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module" src="app.js?v=1"></script>
+
+</body>
+</html>
