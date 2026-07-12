@@ -32,7 +32,9 @@ Financial Planning
 
 # Tasks
 
-- [ ] Design Monthly Plan page
+- [x] Design Monthly Plan page
+- [ ] Add Plan progress tracking
+  - **Status:** In Progress
 - [ ] Create Firestore budget data model
 - [ ] Display budget categories
 - [ ] Edit planned monthly budget amounts
