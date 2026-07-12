@@ -55,3 +55,6 @@
 
 ### Documentation
 - Added Architecture document.
+
+### Documentation
+- Updated repository README.
