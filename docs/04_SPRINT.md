@@ -32,19 +32,19 @@ Financial Planning
 
 # Tasks
 
+## Tasks
+
 - [x] Design Monthly Plan
-- [x] Add Plan progress tracking
-- [x] Improve Plan readability and collapsible sections
-- [ ] Add Plan expand/collapse controls and complete UI consistency pass
-  - **Status:** In Progress- [ ] Create Firestore budget data model
-- [ ] Display budget categories
-- [ ] Edit planned monthly budget amounts
-- [ ] Save budget changes to Firestore
-- [ ] Display budget totals
-- [ ] Calculate remaining monthly budget
-- [ ] Build reusable budget card component
-- [ ] Test Budget module
-- [ ] Update documentation
+- [x] Add Plan Progress Tracking
+- [x] Improve Plan Readability and Collapsible Sections
+
+- [ ] Complete UI Consistency Pass *(In Progress)*
+- [ ] Add Expand All / Collapse All Controls
+- [ ] Edit Planned Amounts
+- [ ] Save Plan Changes to Firestore
+
+- [ ] Test Plan Module
+- [ ] Update Documentation
 
 ---
 
