@@ -52,3 +52,6 @@
 
 ### Documentation
 - Added Product Identity document.
+
+### Documentation
+- Added Architecture document.
