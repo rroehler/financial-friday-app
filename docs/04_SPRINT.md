@@ -14,7 +14,7 @@ Build a solid project foundation before adding new features.
 
 -----
 
-# Sprint 002 - Budget Foundation
+# Sprint 002 - Financial Planning
 
 ## Goal
 
