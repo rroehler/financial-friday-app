@@ -36,3 +36,6 @@
 
 ### Added
 - UI Guidelines documentation
+
+### Documentation
+- Added Product Identity document.
