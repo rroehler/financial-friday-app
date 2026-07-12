@@ -12,9 +12,9 @@ Build a solid project foundation before adding new features.
 
 ## Status: Complete
 
-# Sprint 002 - Budget Foundation
-
 -----
+
+# Sprint 002 - Budget Foundation
 
 ## Sprint Goal
 
