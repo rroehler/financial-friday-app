@@ -1,25 +1,15 @@
-Sprint 1
+# Sprint 001
 
-Goal
+## Goal
+Build a solid project foundation before adding new features.
 
-Architecture
+## Tasks
+- [x] Separate HTML, CSS, and JavaScript
+- [x] Fix Firebase login
+- [ ] Create project documentation
+- [ ] Create Accounts page
+- [ ] Allow editing account balances
+- [ ] Save balances to Firestore
 
-Tasks
-
-☐ Separate JS
-
-☐ Separate CSS
-
-☑ Login
-
-☑ Firebase
-
-☑ GitHub Pages
-
-☐ Accounts page
-
-☐ Editable balances
-
-Status
-
+## Status
 In Progress
