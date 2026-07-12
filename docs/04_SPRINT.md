@@ -7,7 +7,8 @@ Build a solid project foundation before adding new features.
 - [x] Separate HTML, CSS, and JavaScript
 - [x] Fix Firebase login
 - [ ] Create project documentation
-- [~] Create Accounts page (In Progress)
+- [ ] Create Accounts page
+    - **Status:** In Progress
 - [ ] Allow editing account balances
 - [ ] Save balances to Firestore
 
