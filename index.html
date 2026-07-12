@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Financial Friday</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+<div id="app">
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <div class="login-title">
+        <p class="mark">Financial Friday</p>
+        <p>Log in to your dashboard</p>
+      </div>
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" id="login-btn">Log in</button>
+      <p class="login-error" id="login-error"></p>
+    </div>
+  </div>
+
+  <div class="app-shell" id="app-shell">
+    <div class="topbar">
+      <div class="greeting">
+        <p id="greeting-time">Good evening</p>
+        <p>Ryan</p>
+      </div>
+      <button class="logout-btn" id="logout-btn">Log out</button>
+    </div>
+
+    <div class="content">
+      <div class="tab-view active" id="view-overview">
+        <div class="hero">
+          <p class="label">NET WORTH</p>
+          <p class="value" id="hero-networth">$0</p>
+          <p class="delta" id="hero-delta"></p>
+        </div>
+        <div class="trend-wrap"><canvas id="trend-chart"></canvas></div>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <p class="m-label">Cash</p>
+            <p class="m-value" id="metric-cash">$0</p>
+          </div>
+          <div class="metric-card">
+            <p class="m-label">Debt</p>
+            <p class="m-value" id="metric-debt">$0</p>
+          </div>
+        </div>
+        <p class="section-label">TOP SPENDING THIS MONTH</p>
+        <div id="top-spending-list"></div>
+      </div>
+
+      <div class="tab-view" id="view-accounts">
+        <div class="accounts-header">
+          <div>
+            <p class="eyebrow">ACCOUNTS</p>
+            <h1>Money at a glance</h1>
+          </div>
+          <p class="accounts-hint">Swipe or tap a card to bring it forward.</p>
+        </div>
+
+        <div class="account-carousel" id="account-carousel" aria-label="Account groups">
+          <article class="account-panel account-panel--cash is-front" data-panel="cash" tabindex="0">
+            <div class="panel-topline">
+              <div>
+                <p class="panel-kicker">AVAILABLE</p>
+                <h2>Cash</h2>
+              </div>
+              <div class="panel-icon"><i class="ti ti-wallet" aria-hidden="true"></i></div>
+            </div>
+
+            <div class="account-list">
+              <button class="account-row" data-account="navyFederal" type="button">
+                <span>
+                  <strong>Navy Federal</strong>
+                  <small>Operating account</small>
+                </span>
+                <span class="account-row-value" id="account-navyFederal">$0.00</span>
+                <i class="ti ti-pencil" aria-hidden="true"></i>
+              </button>
+              <button class="account-row" data-account="purdueFCU" type="button">
+                <span>
+                  <strong>Purdue Federal</strong>
+                  <small>Weekly spending</small>
+                </span>
+                <span class="account-row-value" id="account-purdueFCU">$0.00</span>
+                <i class="ti ti-pencil" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div class="panel-total">
+              <span>Total cash</span>
+              <strong id="account-total-cash">$0.00</strong>
+            </div>
+          </article>
+
+          <article class="account-panel account-panel--debt is-back" data-panel="debt" tabindex="0">
+            <div class="panel-topline">
+              <div>
+                <p class="panel-kicker">OWED</p>
+                <h2>Debt</h2>
+              </div>
+              <div class="panel-icon"><i class="ti ti-credit-card" aria-hidden="true"></i></div>
+            </div>
+
+            <div class="account-list">
+              <button class="account-row" data-account="savorOne" type="button">
+                <span>
+                  <strong>Capital One SavorOne</strong>
+                  <small>Rent card</small>
+                </span>
+                <span class="account-row-value" id="account-savorOne">$0.00</span>
+                <i class="ti ti-pencil" aria-hidden="true"></i>
+              </button>
+              <button class="account-row" data-account="oneKey" type="button">
+                <span>
+                  <strong>Wells Fargo OneKey</strong>
+                  <small>Everyday card</small>
+                </span>
+                <span class="account-row-value" id="account-oneKey">$0.00</span>
+                <i class="ti ti-pencil" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div class="panel-total">
+              <span>Total debt</span>
+              <strong id="account-total-debt">$0.00</strong>
+            </div>
+          </article>
+        </div>
+
+        <div class="carousel-controls" aria-label="Account carousel controls">
+          <button class="carousel-arrow" id="carousel-prev" type="button" aria-label="Previous account group">
+            <i class="ti ti-chevron-left" aria-hidden="true"></i>
+          </button>
+          <div class="carousel-dots">
+            <button class="carousel-dot active" data-target-panel="cash" type="button" aria-label="Show cash accounts"></button>
+            <button class="carousel-dot" data-target-panel="debt" type="button" aria-label="Show debt accounts"></button>
+          </div>
+          <button class="carousel-arrow" id="carousel-next" type="button" aria-label="Next account group">
+            <i class="ti ti-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+        <p class="accounts-note">Balances are securely saved to your Financial Friday account.</p>
+      </div>
+
+      <div class="tab-view" id="view-budget">
+        <div class="placeholder-view"><i class="ti ti-calendar-dollar" aria-hidden="true"></i><p>Monthly Budget &mdash; coming soon</p></div>
+      </div>
+      <div class="tab-view" id="view-debt">
+        <div class="placeholder-view"><i class="ti ti-trending-down" aria-hidden="true"></i><p>Debt Plan &mdash; coming soon</p></div>
+      </div>
+      <div class="tab-view" id="view-weekly">
+        <div class="placeholder-view"><i class="ti ti-calendar-check" aria-hidden="true"></i><p>Weekly Tracker &mdash; coming soon</p></div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item active" data-view="overview"><i class="ti ti-chart-donut-2" aria-hidden="true"></i><span>Overview</span></button>
+      <button class="nav-item" data-view="accounts"><i class="ti ti-building-bank" aria-hidden="true"></i><span>Accounts</span></button>
+      <button class="nav-item" data-view="budget"><i class="ti ti-calendar-dollar" aria-hidden="true"></i><span>Budget</span></button>
+      <button class="nav-item" data-view="debt"><i class="ti ti-trending-down" aria-hidden="true"></i><span>Debt plan</span></button>
+      <button class="nav-item" data-view="weekly"><i class="ti ti-calendar-check" aria-hidden="true"></i><span>Weekly</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="balance-modal" hidden>
+  <div class="balance-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close" type="button" aria-label="Close edit balance dialog">
+      <i class="ti ti-x" aria-hidden="true"></i>
+    </button>
+    <p class="modal-kicker">EDIT BALANCE</p>
+    <h2 id="modal-title">Account</h2>
+    <div class="modal-current">
+      <span>Current balance</span>
+      <strong id="modal-current-balance">$0.00</strong>
+    </div>
+    <div class="field modal-field">
+      <label for="modal-new-balance">New balance</label>
+      <div class="money-input-wrap">
+        <span>$</span>
+        <input id="modal-new-balance" type="number" min="0" step="0.01" inputmode="decimal">
+      </div>
+    </div>
+    <p class="modal-error" id="modal-error"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modal-cancel" type="button">Cancel</button>
+      <button class="btn-primary modal-save" id="modal-save" type="button">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module" src="app.js?v=3"></script>
+</body>
+</html>
