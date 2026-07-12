@@ -94,3 +94,9 @@ If the answer is no, the feature should not be built.
 # Long-Term Goal
 
 Financial Friday should become the first app someone opens when deciding what to do with their money—not just when looking at where it went.
+
+---
+
+# The Financial Friday Promise
+
+Financial Friday will always prioritize helping users build long-term financial health over encouraging unnecessary spending, risky decisions, or engagement for its own sake.
