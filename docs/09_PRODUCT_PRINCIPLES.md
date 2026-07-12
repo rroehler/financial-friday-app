@@ -1,39 +1,13 @@
-Financial Friday Principles
+# Product Principles
 
-1.
+1. Recommend actions, not just display data.
 
-Recommend actions.
+2. Keep the interface simple.
 
-Don't just display information.
+3. Optimize long-term wealth, not just budgeting.
 
-------------------
+4. Every feature should help users make better financial decisions.
 
-2.
+5. Mobile-first design.
 
-Reduce anxiety.
-
-Don't overwhelm.
-
-------------------
-
-3.
-
-Everything must answer
-
-"What should I do next?"
-
-------------------
-
-4.
-
-Always optimize net worth.
-
-Not just budgets.
-
-------------------
-
-5.
-
-Simple beats powerful.
-
-Powerful comes later.
+6. Build for scalability from the beginning.
