@@ -35,7 +35,8 @@ Financial Planning
 - [x] Design Monthly Plan
 - [x] Add Plan progress tracking
 - [x] Improve Plan readability and collapsible sections
-- [ ] Create Firestore budget data model
+- [ ] Add Plan expand/collapse controls and complete UI consistency pass
+  - **Status:** In Progress- [ ] Create Firestore budget data model
 - [ ] Display budget categories
 - [ ] Edit planned monthly budget amounts
 - [ ] Save budget changes to Firestore
