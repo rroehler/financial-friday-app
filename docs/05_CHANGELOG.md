@@ -1,21 +1,21 @@
-0.1.0
+# Changelog
 
-Initial Release
+## v0.1.0 - Foundation
 
-• Login
+### Added
+- Initial GitHub repository
+- Firebase Authentication
+- Firestore integration
+- Overview dashboard
+- Net worth calculation
+- Cash and debt summary cards
+- Weekly trend chart
+- Top spending summary
+- Bottom navigation
 
-• Overview
+### Changed
+- Separated HTML, CSS, and JavaScript into individual files.
+- Established project documentation structure.
 
-• Firebase
-
-------------------
-
-0.2.0
-
-Accounts
-
-• Editable balances
-
-• Live updates
-
-• Better UI
+### Fixed
+- Firebase login issue on GitHub Pages.
