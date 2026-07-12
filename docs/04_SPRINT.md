@@ -26,13 +26,13 @@ By the end of this sprint, users should be able to create, view, and manage a mo
 
 # Epic
 
-Budget Engine
+Financial Planning
 
 ---
 
 # Tasks
 
-- [ ] Design Monthly Budget page
+- [ ] Design Monthly Plan page
 - [ ] Create Firestore budget data model
 - [ ] Display budget categories
 - [ ] Edit planned monthly budget amounts
