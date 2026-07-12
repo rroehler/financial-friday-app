@@ -10,10 +10,11 @@ Build a solid project foundation before adding new features.
 - [x] Create Accounts page
 - [x] Manage Account Balances
 
-## Status
-## Complete
+## Status: Complete
 
 # Sprint 002 - Budget Foundation
+
+-----
 
 ## Sprint Goal
 
