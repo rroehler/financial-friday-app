@@ -1,26 +1,28 @@
-0.1
-Overview
+# Roadmap
 
-0.2
-Accounts
+## Phase 1 - Foundation
+- Authentication
+- Overview Dashboard
+- Accounts
+- Weekly Tracker
+- Monthly Budget
+- Debt Plan
+- CSV Import
 
-0.3
-Weekly Tracker
+## Phase 2 - Automation
+- Plaid Integration
+- Auto Categorization
+- Recurring Transactions
+- Notifications
 
-0.4
-Budget
+## Phase 3 - Intelligence
+- Financial Coach
+- Goal Tracking
+- Cash Flow Forecasting
+- Personalized Recommendations
 
-0.5
-Debt
-
-0.6
-CSV Import
-
-1.0
-Manual Financial Operating System
-
-1.5
-Plaid
-
-2.0
-Financial Coach
+## Phase 4 - Public Release
+- Multi-user Support
+- Subscription Model
+- Mobile App
+- Play Store Release
