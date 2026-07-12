@@ -37,12 +37,12 @@ Financial Planning
 - [x] Design Monthly Plan
 - [x] Add Plan Progress Tracking
 - [x] Improve Plan Readability and Collapsible Sections
---
+<br>
 - [ ] Complete UI Consistency Pass *(In Progress)*
 - [ ] Add Expand All / Collapse All Controls
 - [ ] Edit Planned Amounts
 - [ ] Save Plan Changes to Firestore
---
+<br>
 - [ ] Test Plan Module
 - [ ] Update Documentation
 
