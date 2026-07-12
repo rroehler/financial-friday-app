@@ -58,3 +58,16 @@
 
 ### Documentation
 - Updated repository README.
+
+## v0.3.3 - Plan UI Refinement
+
+### Added
+- Collapsible Plan sections
+- Section-level progress indicators
+- Persistent collapsed state
+
+### Changed
+- Improved visual hierarchy for expanded and collapsed cards
+- Increased subcategory readability
+- Balanced card layout for desktop
+- Refined section header styling
