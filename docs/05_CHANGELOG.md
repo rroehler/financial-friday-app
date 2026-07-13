@@ -71,3 +71,58 @@
 - Increased subcategory readability
 - Balanced card layout for desktop
 - Refined section header styling
+
+# v0.4.0 — First Step
+
+**Release Date:** July 2026
+
+## Architect's Intent
+
+Establish the reusable editing workflow that will become the foundation of Freedom Mode. This release introduces direct editing of planned amounts while maintaining a fast, intuitive user experience and preparing the application for planning sessions in future releases.
+
+---
+
+## Added
+
+- Quick Edit for individual Monthly Plan categories.
+- Mobile-friendly bottom sheet editor.
+- Planned amount validation.
+- Firestore persistence for planned amounts.
+- Immediate recalculation of remaining category balances.
+- Live updates for progress bars, section totals, and monthly totals.
+- Visual confirmation after successful updates.
+- Added `ARCHITECT_NOTES.md`.
+
+---
+
+## Changed
+
+- Plan category rows are now directly editable.
+- Established the reusable editing workflow for future Freedom Mode.
+- Updated application assets to cache version 9.
+
+---
+
+## Fixed
+
+- N/A
+
+---
+
+## Known Issues
+
+- On some mobile devices, the on-screen keyboard can partially obscure the Save and Cancel buttons while editing planned amounts.
+- Planned for resolution in a future UI enhancement release.
+
+---
+
+## Release Status
+
+**Completed and Approved**
+
+- ✅ Feature complete
+- ✅ QA passed
+- ✅ Firestore integration verified
+- ✅ Mobile tested
+- ✅ No console errors
+- ✅ Ready for merge
