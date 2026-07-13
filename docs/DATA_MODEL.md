@@ -34,8 +34,11 @@ Monthly planning information.
 Structure
 
 budget
+
 └── monthlyBudget
+
     └── months
+    
         └── YYYY-MM
 
 Fields
