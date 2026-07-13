@@ -126,6 +126,12 @@ const modalError = document.getElementById('modal-error');
 const modalSave = document.getElementById('modal-save');
 const modalCancel = document.getElementById('modal-cancel');
 const accountsNote = document.querySelector('.accounts-note');
+const planEditSheet = document.getElementById('plan-edit-sheet');
+const planEditInput = document.getElementById('plan-edit-input');
+const planEditError = document.getElementById('plan-edit-error');
+const planEditSave = document.getElementById('plan-edit-save');
+const planEditCancel = document.getElementById('plan-edit-cancel');
+
 
 let accountState = { ...EMPTY_ACCOUNTS };
 let weeklyTrendHistory = [];
@@ -134,6 +140,10 @@ let editingAccount = null;
 let trendChart;
 let swipeStartX = null;
 let isSavingBalance = false;
+let editingPlanCategory = null;
+let isSavingPlanAmount = false;
+let lastUpdatedPlanKey = null;
+
 
 function round2(value) {
   return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
@@ -442,9 +452,18 @@ function renderPlan() {
 function renderPlanRow(category) {
   const cappedPercent = Math.min(Math.max(category.percent, 0), 100);
   const remainingLabel = category.remaining < 0 ? 'over' : 'left';
+  const categoryKey = `${category.section}:${category.item}`;
+  const updatedClass = lastUpdatedPlanKey === categoryKey ? ' is-just-updated' : '';
 
   return `
-    <div class="plan-row is-${category.status}">
+    <button
+      class="plan-row plan-row-edit is-${category.status}${updatedClass}"
+      type="button"
+      data-plan-section="${category.section}"
+      data-plan-item="${category.item}"
+      data-plan-label="${category.label}"
+      aria-label="Edit ${category.label} planned amount"
+    >
       <div class="plan-row-top">
         <span class="plan-row-name">${category.label}</span>
         <div class="plan-row-remaining">
@@ -459,11 +478,136 @@ function renderPlanRow(category) {
       <div class="plan-progress is-${category.status}" aria-hidden="true">
         <span style="width:${cappedPercent}%"></span>
       </div>
-    </div>
+    </button>
   `;
 }
 
 
+function findPlanCategory(section, item) {
+  return PLAN_SECTIONS
+    .flatMap(planSection => planSection.categories)
+    .find(category => category.section === section && category.item === item);
+}
+
+function setPlanEditSavingState(isSaving) {
+  isSavingPlanAmount = isSaving;
+  planEditInput.disabled = isSaving;
+  planEditCancel.disabled = isSaving;
+  planEditSave.disabled = isSaving || !isPlanEditChanged();
+  planEditSave.classList.toggle('is-saving', isSaving);
+  planEditSave.setAttribute('aria-busy', String(isSaving));
+}
+
+function isPlanEditChanged() {
+  if (!editingPlanCategory) return false;
+
+  const value = Number(planEditInput.value);
+  return Number.isFinite(value)
+    && value >= 0
+    && round2(value) !== editingPlanCategory.planned;
+}
+
+function validatePlanEditInput() {
+  const rawValue = planEditInput.value.trim();
+  const value = Number(rawValue);
+
+  if (rawValue === '' || !Number.isFinite(value) || value < 0) {
+    planEditError.textContent = 'Enter a valid amount of $0 or more.';
+    planEditSave.disabled = true;
+    return false;
+  }
+
+  planEditError.textContent = '';
+  planEditSave.disabled = isSavingPlanAmount || !isPlanEditChanged();
+  return true;
+}
+
+function openPlanEditSheet(section, item, label) {
+  const category = findPlanCategory(section, item);
+  if (!category) return;
+
+  const data = getPlanCategoryData(category);
+  editingPlanCategory = {
+    section,
+    item,
+    label: label || category.label,
+    planned: data.planned
+  };
+
+  document.getElementById('plan-edit-title').textContent = editingPlanCategory.label;
+  document.getElementById('plan-edit-current').textContent = fmt(data.planned, 2);
+  planEditInput.value = data.planned.toFixed(2);
+  planEditError.textContent = '';
+  planEditSheet.hidden = false;
+  document.body.style.overflow = 'hidden';
+  setPlanEditSavingState(false);
+
+  requestAnimationFrame(() => {
+    planEditInput.focus();
+    planEditInput.select();
+  });
+}
+
+function closePlanEditSheet(force = false) {
+  if (isSavingPlanAmount && !force) return;
+
+  planEditSheet.hidden = true;
+  document.body.style.overflow = '';
+  editingPlanCategory = null;
+  planEditError.textContent = '';
+}
+
+async function savePlanEdit() {
+  if (!editingPlanCategory || isSavingPlanAmount || !validatePlanEditInput()) return;
+
+  const nextValue = round2(Number(planEditInput.value));
+  const monthKey = new Date().toISOString().slice(0, 7);
+  const fieldKey = `mb-${editingPlanCategory.section}-${editingPlanCategory.item}-budgeted`;
+  const categoryKey = `${editingPlanCategory.section}:${editingPlanCategory.item}`;
+
+  setPlanEditSavingState(true);
+
+  try {
+    await setDoc(
+      doc(db, 'budget', 'monthlyBudget', 'months', monthKey),
+      { [fieldKey]: nextValue },
+      { merge: true }
+    );
+
+    monthlyBudgetState[fieldKey] = nextValue;
+    lastUpdatedPlanKey = categoryKey;
+    renderPlan();
+    renderTopSpending();
+    closePlanEditSheet(true);
+
+    window.setTimeout(() => {
+      if (lastUpdatedPlanKey === categoryKey) {
+        lastUpdatedPlanKey = null;
+        renderPlan();
+      }
+    }, 950);
+  } catch (error) {
+    console.error('Unable to save planned amount:', error);
+    planEditError.textContent = 'Unable to save this amount. Check your connection and try again.';
+    setPlanEditSavingState(false);
+  }
+}
+
+planEditInput?.addEventListener('input', validatePlanEditInput);
+planEditInput?.addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    savePlanEdit();
+  }
+});
+
+document.getElementById('plan-edit-close')?.addEventListener('click', () => closePlanEditSheet());
+planEditCancel?.addEventListener('click', () => closePlanEditSheet());
+planEditSave?.addEventListener('click', savePlanEdit);
+
+planEditSheet?.addEventListener('click', event => {
+  if (event.target === planEditSheet) closePlanEditSheet();
+});
 
 function setAllPlanSectionsCollapsed(shouldCollapse) {
   PLAN_SECTIONS.forEach(section => {
@@ -488,6 +632,16 @@ document.getElementById('plan-collapse-all')?.addEventListener('click', () => {
 });
 
 document.getElementById('plan-section-grid')?.addEventListener('click', event => {
+  const editRow = event.target.closest('.plan-row-edit');
+  if (editRow) {
+    openPlanEditSheet(
+      editRow.dataset.planSection,
+      editRow.dataset.planItem,
+      editRow.dataset.planLabel
+    );
+    return;
+  }
+
   const toggle = event.target.closest('.plan-card-toggle');
   if (!toggle) return;
 
@@ -734,5 +888,12 @@ balanceModal.addEventListener('click', event => {
 });
 
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && !balanceModal.hidden) closeBalanceModal();
+  if (event.key !== 'Escape') return;
+
+  if (!planEditSheet.hidden) {
+    closePlanEditSheet();
+    return;
+  }
+
+  if (!balanceModal.hidden) closeBalanceModal();
 });

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 <div id="app">
@@ -276,7 +276,39 @@
   </div>
 </div>
 
+<div class="plan-sheet-backdrop" id="plan-edit-sheet" hidden>
+  <section class="plan-edit-sheet" role="dialog" aria-modal="true" aria-labelledby="plan-edit-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <button class="modal-close plan-sheet-close" id="plan-edit-close" type="button" aria-label="Close planned amount editor">
+      <i class="ti ti-x" aria-hidden="true"></i>
+    </button>
+    <p class="modal-kicker">QUICK EDIT</p>
+    <h2 id="plan-edit-title">Category</h2>
+    <p class="plan-edit-help">Update this category's planned amount for the current month.</p>
+
+    <div class="modal-current">
+      <span>Current planned amount</span>
+      <strong id="plan-edit-current">$0.00</strong>
+    </div>
+
+    <div class="field modal-field">
+      <label for="plan-edit-input">Planned amount</label>
+      <div class="money-input-wrap">
+        <span>$</span>
+        <input id="plan-edit-input" type="number" min="0" step="0.01" inputmode="decimal">
+      </div>
+    </div>
+
+    <p class="modal-error" id="plan-edit-error"></p>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" id="plan-edit-cancel" type="button">Cancel</button>
+      <button class="btn-primary modal-save" id="plan-edit-save" type="button" disabled>Save</button>
+    </div>
+  </section>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script type="module" src="app.js?v=8"></script>
+<script type="module" src="app.js?v=9"></script>
 </body>
 </html>
