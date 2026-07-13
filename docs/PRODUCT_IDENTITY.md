@@ -22,7 +22,7 @@ If the answer is no, the feature likely does not belong.
 
 # Mission
 
-Help people build financial freedom one decision at a time.
+Help people build financial freedom with confidence, one decision at a time.
 
 ---
 
