@@ -1,102 +1,200 @@
-# Product Identity
+# PRODUCT_IDENTITY.md
 
-## What is Financial Friday?
+# Financial Friday — Product Identity
 
-Financial Friday is a personal financial operating system. A financial planning platform.
+## Vision
 
-It helps people make better financial decisions through clear recommendations, structured planning, and long-term financial coaching.
+Financial Friday exists to help people build financial freedom by making confident financial decisions.
 
-It is designed to answer one question:
+Most financial applications tell users what they have already done.
 
-> **"What should I do next?"**
+Financial Friday helps users understand what will happen before they make a financial decision.
+
+Our goal is to transform budgeting from a historical reporting tool into an interactive planning experience.
+
+Every feature should answer one question:
+
+> "Does this help the user make a better financial decision?"
+
+If the answer is no, the feature likely does not belong.
 
 ---
 
 # Mission
 
-Help people build wealth one decision at a time.
+Help people build financial freedom one decision at a time.
 
 ---
 
-# Vision
+# Product Philosophy
 
-Create the simplest and most trusted financial planning platform for individuals who want more than a budgeting app.
+Financial Friday is not just a budgeting application.
 
----
+It is a financial planning and decision-making platform.
 
-# Core Values
+Instead of focusing on where money went, Financial Friday focuses on where money can go.
 
-### Simplicity
+Users should leave every planning session feeling more confident about their financial future.
 
-Financial information should be easy to understand.
-
----
-
-### Progress
-
-Every interaction should move the user closer to their financial goals.
+The application should always encourage progress rather than punish mistakes.
 
 ---
 
-### Trust
+# Core Principles
 
-Recommendations must be objective, transparent, and explainable.
+## Simplicity
 
----
+Complex financial information should feel simple.
 
-### Consistency
+Users should never need to perform calculations in their heads.
 
-The app should encourage small, repeatable habits that compound over time.
-
----
-
-# We Are
-
-- A financial coach
-- A planning tool
-- A decision support system
-- A long-term wealth builder
+The application should always provide the answer, not just the data.
 
 ---
 
-# We Are Not
+## Clarity
 
-- A banking app
-- An investment platform
-- Tax software
-- Accounting software
-- A spreadsheet replacement
+Every screen should immediately answer a question.
 
----
+Examples:
 
-# Success
-
-A successful user should:
-
-- Eliminate high-interest debt.
-- Build an emergency fund.
-- Spend intentionally.
-- Increase their net worth over time.
-- Feel confident about their financial future.
+- How much can I spend?
+- What is left this month?
+- Which decision improves my financial future?
+- What happens if I change this?
 
 ---
 
-# Guiding Question
+## Empowerment
 
-Before adding any feature, ask:
+Financial Friday should encourage users.
 
-**Does this help users make better financial decisions?**
+The application should celebrate improvements instead of highlighting failures.
 
-If the answer is no, the feature should not be built.
+Example:
+
+✓ "You increased your financial freedom by $185 this month."
+
+instead of
+
+✗ "You spent $185 less."
+
+The difference matters.
 
 ---
 
-# Long-Term Goal
+## Confidence
 
-Financial Friday should become the first app someone opens when deciding what to do with their money—not just when looking at where it went.
+Planning should feel safe.
+
+Users should be free to experiment with financial decisions before committing to them.
+
+Changes should be easy to make, easy to understand, and easy to undo.
 
 ---
 
-# The Financial Friday Promise
+## Consistency
 
-Financial Friday will always prioritize helping users build long-term financial health over encouraging unnecessary spending, risky decisions, or engagement for its own sake.
+Every page should follow the same visual language.
+
+The experience should feel calm, modern, and intentional.
+
+Animations should support understanding, not distract from it.
+
+---
+
+# The Financial Friday Experience
+
+Financial Friday has two distinct experiences.
+
+## Normal Mode
+
+Normal Mode reflects reality.
+
+It displays current balances, spending, remaining funds, and financial progress.
+
+This is where users monitor their finances.
+
+---
+
+## Freedom Mode
+
+Freedom Mode is where users plan their future.
+
+Nothing changes until the user chooses to save.
+
+While in Freedom Mode:
+
+- Users can experiment safely.
+- Financial impact updates instantly.
+- Remaining balances update live.
+- Progress bars update live.
+- Section totals update live.
+- Overall financial impact updates live.
+
+Freedom Mode is the signature feature of Financial Friday.
+
+It transforms budgeting into financial decision making.
+
+---
+
+# Personality
+
+Financial Friday should feel:
+
+- Encouraging
+- Calm
+- Intelligent
+- Honest
+- Motivating
+- Modern
+
+The application should never shame users.
+
+It should always help them move forward.
+
+---
+
+# Design Goals
+
+Every screen should feel:
+
+- Clean
+- Fast
+- Intentional
+- Focused
+- Easy to scan
+
+Visual hierarchy should guide users naturally toward the most important information.
+
+---
+
+# Future Vision
+
+Financial Friday should become the place where people make financial decisions.
+
+Instead of opening a spreadsheet...
+
+Instead of opening a banking app...
+
+Instead of guessing...
+
+Users should think:
+
+> "Let's see what Financial Friday says."
+
+That is the standard every new feature should support.
+
+---
+
+# Product Tagline
+
+**Build financial freedom one Friday at a time.**
+
+---
+
+# Product Promise
+
+Financial Friday helps people build financial freedom by showing the impact of their financial decisions before they commit to them.
+
+Every decision should leave users feeling more informed, more confident, and one step closer to financial freedom.
