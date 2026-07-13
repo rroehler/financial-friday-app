@@ -40,6 +40,18 @@ The application should always encourage progress rather than punish mistakes.
 
 ---
 
+# Signature Experience
+
+Financial Friday's signature experience is Freedom Mode.
+
+Freedom Mode allows users to safely explore financial decisions before committing them to reality.
+
+Every major feature should strengthen the Freedom Mode experience.
+
+If a feature does not improve planning, confidence, or financial decision-making, it should be reconsidered.
+
+---
+
 # Core Principles
 
 ## Simplicity
