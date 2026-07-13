@@ -35,11 +35,9 @@ Structure
 
 budget
 
-└── monthlyBudget
-
+└── monthlyBudget<br>
     └── months
-    
-        └── YYYY-MM
+            └── YYYY-MM
 
 Fields
 
