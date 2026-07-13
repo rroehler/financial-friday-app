@@ -35,7 +35,7 @@ Structure
 
 budget
 
-└── monthlyBudget<br>
+└── monthlyBudget
     └── months
             └── YYYY-MM
 
