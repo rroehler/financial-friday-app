@@ -9,7 +9,7 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
 
-  "explorer.confirmDelete": true,
+  "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
 
   "git.autofetch": true,
