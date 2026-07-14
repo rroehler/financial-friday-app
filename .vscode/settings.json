@@ -1,0 +1,21 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": true,
+
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  "explorer.confirmDelete": true,
+  "explorer.confirmDragAndDrop": false,
+
+  "git.autofetch": true,
+  "git.confirmSync": false,
+
+  "workbench.startupEditor": "none",
+
+  "liveServer.settings.donotShowInfoMsg": true
+}

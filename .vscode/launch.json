@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Financial Friday",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://127.0.0.1:5500",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}
