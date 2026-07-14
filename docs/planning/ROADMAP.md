@@ -26,13 +26,29 @@ Status: In Progress
 
 # Phase 2 — Financial Planning
 
-### Objectives
+## v0.4.0 — First Step ✅
 
-- Editable Monthly Plan
-- Freedom Mode
-- Import Previous Month
-- Planning simulations
-- Improved debt planning
+## v0.4.1 — Into the Blue
+
+    • Planning Session Engine
+    • Freedom Mode
+    • Reality Mode
+    • Financial Freedom Indicator
+
+## v0.4.2 — Fresh Start
+
+    • Import Previous Plan
+    • Planning Mode enhancements
+
+## v0.4.3 — Smooth Sailing
+
+    • Keyboard avoidance
+    • Sticky Save/Cancel buttons
+    • Better scrolling
+    • Safe-area support (modern phones)
+    • Smoother bottom sheet animations
+    • Better touch targets
+    • Improved mobile spacing
 
 ---
 
