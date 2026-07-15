@@ -116,6 +116,13 @@ const collapsedPlanSections = new Set(
 );
 
 let monthlyBudgetState = {};
+const APP_MODES = Object.freeze({ REALITY: 'reality', FREEDOM: 'freedom' });
+const appState = {
+  mode: APP_MODES.REALITY,
+  realityPlan: {},
+  workingPlan: null,
+  hasPendingChanges: false
+};
 
 const loginScreen = document.getElementById('login-screen');
 const appShell = document.getElementById('app-shell');
@@ -131,6 +138,12 @@ const planEditInput = document.getElementById('plan-edit-input');
 const planEditError = document.getElementById('plan-edit-error');
 const planEditSave = document.getElementById('plan-edit-save');
 const planEditCancel = document.getElementById('plan-edit-cancel');
+const modeToggle = document.getElementById('mode-toggle');
+const freedomBanner = document.getElementById('freedom-banner');
+const freedomIntro = document.getElementById('freedom-intro');
+const realityDialog = document.getElementById('reality-dialog');
+const accountsLockedDialog = document.getElementById('accounts-locked-dialog');
+const modeTransition = document.getElementById('mode-transition');
 
 
 let accountState = { ...EMPTY_ACCOUNTS };
@@ -147,6 +160,31 @@ let lastUpdatedPlanKey = null;
 
 function round2(value) {
   return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+}
+
+function getActivePlan() {
+  return appState.mode === APP_MODES.FREEDOM && appState.workingPlan
+    ? appState.workingPlan
+    : appState.realityPlan;
+}
+
+function getTotalPlanned(plan) {
+  return round2(PLAN_SECTIONS.flatMap(section => section.categories).reduce((total, category) => {
+    const key = `mb-${category.section}-${category.item}-budgeted`;
+    const value = Number(plan[key]);
+    return total + (Number.isFinite(value) ? value : category.defaultPlanned);
+  }, 0));
+}
+
+function getFreedomDifference() {
+  if (!appState.workingPlan) return 0;
+  return round2(getTotalPlanned(appState.realityPlan) - getTotalPlanned(appState.workingPlan));
+}
+
+function getFreedomMessage(difference = getFreedomDifference()) {
+  if (difference > 0) return `You have increased your financial freedom by ${fmt(difference, 2)} for this month.`;
+  if (difference < 0) return `You have decreased your financial freedom by ${fmt(Math.abs(difference), 2)} for this month.`;
+  return 'Your working plan has not changed your financial freedom yet.';
 }
 
 function normalizeAccounts(data = {}) {
@@ -194,6 +232,177 @@ function setAccountsMessage(message, type = '') {
   accountsNote.classList.toggle('is-success', type === 'success');
 }
 
+function setApplicationMode(mode) {
+  appState.mode = mode;
+  const isFreedom = mode === APP_MODES.FREEDOM;
+
+  document.body.classList.toggle('freedom-mode', isFreedom);
+  freedomBanner.classList.toggle('is-visible', isFreedom);
+  freedomBanner.setAttribute('aria-hidden', String(!isFreedom));
+  document.getElementById('freedom-impact-card').hidden = !isFreedom;
+  modeToggle.classList.toggle('is-reality', isFreedom);
+  modeToggle.querySelector('span').textContent = isFreedom ? 'Make It Real' : 'Freedom Mode';
+  modeToggle.querySelector('i').className = `ti ${isFreedom ? 'ti-world' : 'ti-sparkles'}`;
+
+  renderFreedomImpact();
+  renderOverviewAccountSummary();
+  renderPlan();
+  renderTopSpending();
+  renderTrendChart();
+}
+
+function runModeTransition(targetMode, callback) {
+  const enteringFreedom = targetMode === APP_MODES.FREEDOM;
+  const directionClass = enteringFreedom ? 'to-freedom' : 'to-reality';
+  const root = document.documentElement;
+  const finish = () => {
+    modeTransition.className = 'mode-transition';
+    root.classList.remove('mode-transitioning', directionClass);
+    modeToggle.classList.remove('is-morphing');
+  };
+
+  root.classList.add('mode-transitioning', directionClass);
+  modeTransition.className = `mode-transition is-active ${directionClass}`;
+  modeToggle.classList.add('is-morphing');
+
+  if (typeof document.startViewTransition === 'function') {
+    const transition = document.startViewTransition(() => callback());
+    transition.finished.finally(finish);
+    return;
+  }
+
+  // Unsupported browsers retain fixed geometry and use the same quiet
+  // atmosphere overlay while the state colors ease into place.
+  callback();
+  window.setTimeout(finish, 1200);
+}
+
+function startFreedomMode() {
+  appState.realityPlan = { ...monthlyBudgetState };
+  appState.workingPlan = { ...appState.realityPlan };
+  appState.hasPendingChanges = false;
+  runModeTransition(APP_MODES.FREEDOM, () => {
+    setApplicationMode(APP_MODES.FREEDOM);
+    if (localStorage.getItem('financialFridayHideFreedomIntro') !== 'true') {
+      freedomIntro.hidden = false;
+    }
+  });
+}
+
+function returnToReality({ discard = false, animate = true } = {}) {
+  const finish = () => {
+    if (discard) monthlyBudgetState = { ...appState.realityPlan };
+    appState.workingPlan = null;
+    appState.hasPendingChanges = false;
+    realityDialog.hidden = true;
+    setApplicationMode(APP_MODES.REALITY);
+  };
+
+  if (animate && appState.mode === APP_MODES.FREEDOM) runModeTransition(APP_MODES.REALITY, finish);
+  else finish();
+}
+
+function resetPlanningSession({ clearData = false } = {}) {
+  if (clearData) {
+    monthlyBudgetState = {};
+    appState.realityPlan = {};
+  } else if (Object.keys(appState.realityPlan).length) {
+    monthlyBudgetState = { ...appState.realityPlan };
+  }
+  appState.workingPlan = null;
+  appState.hasPendingChanges = false;
+  realityDialog.hidden = true;
+  freedomIntro.hidden = true;
+  accountsLockedDialog.hidden = true;
+  setApplicationMode(APP_MODES.REALITY);
+}
+
+function renderFreedomImpact() {
+  if (appState.mode !== APP_MODES.FREEDOM) return;
+
+  const difference = getFreedomDifference();
+  const impactValue = document.getElementById('freedom-impact-value');
+  const message = getFreedomMessage(difference);
+  impactValue.textContent = `${difference > 0 ? '+' : difference < 0 ? '-' : ''}${fmt(Math.abs(difference), 2)}`;
+  impactValue.className = difference > 0 ? 'is-positive' : difference < 0 ? 'is-negative' : '';
+  document.getElementById('freedom-impact-copy').textContent = message;
+  document.getElementById('freedom-impact-annual').textContent = `Annual impact: ${difference > 0 ? '+' : difference < 0 ? '-' : ''}${fmt(Math.abs(round2(difference * 12)), 2)}`;
+  document.getElementById('freedom-banner-message').textContent = message;
+}
+
+function openRealityDialog() {
+  if (!appState.hasPendingChanges) {
+    returnToReality({ discard: true });
+    return;
+  }
+
+  document.getElementById('reality-dialog-summary').textContent = getFreedomMessage();
+  document.getElementById('reality-dialog-error').textContent = '';
+  realityDialog.hidden = false;
+}
+
+async function commitWorkingPlan() {
+  if (!appState.workingPlan) return;
+
+  const commitButton = document.getElementById('reality-commit');
+  const errorElement = document.getElementById('reality-dialog-error');
+  commitButton.disabled = true;
+  commitButton.textContent = 'Committing…';
+  errorElement.textContent = '';
+
+  try {
+    const monthKey = new Date().toISOString().slice(0, 7);
+    const updates = {};
+    Object.entries(appState.workingPlan).forEach(([key, value]) => {
+      if (key.endsWith('-budgeted') && value !== appState.realityPlan[key]) updates[key] = value;
+    });
+
+    if (Object.keys(updates).length) {
+      await setDoc(doc(db, 'budget', 'monthlyBudget', 'months', monthKey), updates, { merge: true });
+    }
+
+    monthlyBudgetState = { ...appState.workingPlan };
+    appState.realityPlan = { ...monthlyBudgetState };
+    returnToReality();
+  } catch (error) {
+    console.error('Unable to commit the working plan:', error);
+    errorElement.textContent = 'Unable to commit this plan. Check your connection and try again.';
+  } finally {
+    commitButton.disabled = false;
+    commitButton.textContent = 'Commit Plan';
+  }
+}
+
+modeToggle.addEventListener('click', () => {
+  if (appState.mode === APP_MODES.REALITY) startFreedomMode();
+  else openRealityDialog();
+});
+
+document.getElementById('freedom-guide-btn').addEventListener('click', () => {
+  freedomIntro.hidden = false;
+});
+
+document.getElementById('freedom-intro-continue').addEventListener('click', () => {
+  if (document.getElementById('freedom-intro-dismiss').checked) {
+    localStorage.setItem('financialFridayHideFreedomIntro', 'true');
+  }
+  freedomIntro.hidden = true;
+});
+
+document.getElementById('reality-continue').addEventListener('click', () => {
+  realityDialog.hidden = true;
+});
+document.getElementById('reality-discard').addEventListener('click', () => returnToReality({ discard: true }));
+document.getElementById('reality-commit').addEventListener('click', commitWorkingPlan);
+
+document.getElementById('accounts-locked-close')?.addEventListener('click', () => {
+  accountsLockedDialog.hidden = true;
+});
+
+accountsLockedDialog?.addEventListener('click', event => {
+  if (event.target === accountsLockedDialog) accountsLockedDialog.hidden = true;
+});
+
 async function attemptLogin() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
@@ -216,10 +425,20 @@ document.getElementById('login-btn').addEventListener('click', attemptLogin);
     }
   });
 });
-document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  resetPlanningSession({ clearData: true });
+  await signOut(auth);
+});
 
 document.querySelectorAll('.nav-item').forEach(button => {
   button.addEventListener('click', () => {
+    if (button.dataset.view === 'accounts' && appState.mode === APP_MODES.FREEDOM) {
+      button.classList.remove('is-shaking');
+      void button.offsetWidth;
+      button.classList.add('is-shaking');
+      accountsLockedDialog.hidden = false;
+      return;
+    }
     document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
     document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active'));
     button.classList.add('active');
@@ -229,11 +448,13 @@ document.querySelectorAll('.nav-item').forEach(button => {
 
 onAuthStateChanged(auth, async user => {
   if (!user) {
+    resetPlanningSession({ clearData: true });
     loginScreen.style.display = 'flex';
     appShell.classList.remove('active');
     return;
   }
 
+  resetPlanningSession();
   loginScreen.style.display = 'none';
   appShell.classList.add('active');
   setGreeting();
@@ -241,6 +462,8 @@ onAuthStateChanged(auth, async user => {
 
   try {
     await loadAppData();
+    modeToggle.classList.add('is-inviting');
+    window.setTimeout(() => modeToggle.classList.remove('is-inviting'), 30000);
   } catch (error) {
     console.error('Unable to load Financial Friday data:', error);
     setAccountsMessage('Unable to load account balances. Try refreshing the app.', 'error');
@@ -282,6 +505,9 @@ async function loadMonthlyBudgetData() {
   const monthKey = new Date().toISOString().slice(0, 7);
   const snapshot = await getDoc(doc(db, 'budget', 'monthlyBudget', 'months', monthKey));
   monthlyBudgetState = snapshot.exists() ? snapshot.data() : {};
+  appState.realityPlan = { ...monthlyBudgetState };
+  appState.workingPlan = null;
+  appState.hasPendingChanges = false;
 
   renderTopSpending();
   renderPlan();
@@ -289,7 +515,7 @@ async function loadMonthlyBudgetData() {
 
 function getBudgetValue(section, item, type, fallback = 0) {
   const key = `mb-${section}-${item}-${type}`;
-  const value = Number(monthlyBudgetState[key]);
+  const value = Number(getActivePlan()[key]);
 
   if (Number.isFinite(value)) return round2(value);
   return round2(fallback);
@@ -404,6 +630,7 @@ function renderPlan() {
   const summaryProgress = document.querySelector('.plan-summary-progress');
   summaryProgress.className = `plan-summary-progress is-${overallStatus}`;
   document.getElementById('plan-summary-progress-bar').style.width = `${overallPercent}%`;
+  renderFreedomImpact();
 
   grid.innerHTML = sections.map(section => {
     const isCollapsed = collapsedPlanSections.has(section.key);
@@ -567,6 +794,27 @@ async function savePlanEdit() {
 
   setPlanEditSavingState(true);
 
+  if (appState.mode === APP_MODES.FREEDOM) {
+    appState.workingPlan[fieldKey] = nextValue;
+    appState.hasPendingChanges = Object.keys(appState.workingPlan).some(
+      key => key.endsWith('-budgeted') && appState.workingPlan[key] !== appState.realityPlan[key]
+    );
+    lastUpdatedPlanKey = categoryKey;
+    renderPlan();
+    renderTopSpending();
+    renderOverviewAccountSummary();
+    renderTrendChart();
+    setPlanEditSavingState(false);
+    closePlanEditSheet(true);
+    window.setTimeout(() => {
+      if (lastUpdatedPlanKey === categoryKey) {
+        lastUpdatedPlanKey = null;
+        renderPlan();
+      }
+    }, 950);
+    return;
+  }
+
   try {
     await setDoc(
       doc(db, 'budget', 'monthlyBudget', 'months', monthKey),
@@ -575,6 +823,7 @@ async function savePlanEdit() {
     );
 
     monthlyBudgetState[fieldKey] = nextValue;
+    appState.realityPlan[fieldKey] = nextValue;
     lastUpdatedPlanKey = categoryKey;
     renderPlan();
     renderTopSpending();
@@ -681,9 +930,12 @@ function renderAccounts() {
 
 function renderOverviewAccountSummary() {
   const { cash, debt, netWorth } = getAccountTotals();
+  const isFreedom = appState.mode === APP_MODES.FREEDOM;
+  const projectedNetWorth = round2(netWorth + (isFreedom ? getFreedomDifference() : 0));
 
   document.getElementById('hero-networth').textContent =
-    (netWorth < 0 ? '-' : '') + fmt(Math.abs(netWorth));
+    (projectedNetWorth < 0 ? '-' : '') + fmt(Math.abs(projectedNetWorth));
+  document.getElementById('hero-networth-label').textContent = isFreedom ? 'PROJECTED NET WORTH' : 'NET WORTH';
   document.getElementById('metric-cash').textContent = fmt(cash);
   document.getElementById('metric-debt').textContent = fmt(debt);
 
@@ -694,14 +946,15 @@ function renderOverviewAccountSummary() {
     return;
   }
 
-  const delta = round2(netWorth - weeklyTrendHistory.at(-1));
+  const delta = round2(projectedNetWorth - weeklyTrendHistory.at(-1));
   deltaElement.textContent = (delta >= 0 ? '▲ ' : '▼ ') + fmt(Math.abs(delta)) + ' this week';
   deltaElement.className = 'delta ' + (delta >= 0 ? 'up' : 'down');
 }
 
 function renderTrendChart() {
   const { netWorth } = getAccountTotals();
-  const trendData = [...weeklyTrendHistory, netWorth];
+  const projectedNetWorth = round2(netWorth + (appState.mode === APP_MODES.FREEDOM ? getFreedomDifference() : 0));
+  const trendData = [...weeklyTrendHistory, projectedNetWorth];
 
   if (trendChart) trendChart.destroy();
 
@@ -896,4 +1149,18 @@ document.addEventListener('keydown', event => {
   }
 
   if (!balanceModal.hidden) closeBalanceModal();
+});
+
+window.addEventListener('beforeunload', event => {
+  if (appState.mode !== APP_MODES.FREEDOM || !appState.hasPendingChanges) return;
+  event.preventDefault();
+  event.returnValue = '';
+});
+
+[freedomIntro, realityDialog].forEach(backdrop => {
+  backdrop?.addEventListener('click', event => {
+    if (event.target !== backdrop) return;
+    if (backdrop === freedomIntro) freedomIntro.hidden = true;
+    if (backdrop === realityDialog) realityDialog.hidden = true;
+  });
 });

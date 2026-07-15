@@ -7,9 +7,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
+<div class="mode-transition" id="mode-transition" aria-hidden="true"></div>
 <div id="app">
   <div class="login-screen" id="login-screen">
     <div class="login-card">
@@ -31,12 +32,26 @@
   </div>
 
   <div class="app-shell" id="app-shell">
+    <div class="freedom-banner" id="freedom-banner" aria-hidden="true">
+      <div class="freedom-banner-copy">
+        <span class="freedom-banner-label">FREEDOM MODE</span>
+        <strong id="freedom-banner-message">Explore what's possible.</strong>
+        <small>Nothing changes until you commit this plan to reality.</small>
+      </div>
+      <button class="freedom-guide-btn" id="freedom-guide-btn" type="button">Guide</button>
+    </div>
     <div class="topbar">
       <div class="greeting">
         <p id="greeting-time">Good evening</p>
         <p>Ryan</p>
       </div>
-      <button class="logout-btn" id="logout-btn">Log out</button>
+      <div class="topbar-actions">
+        <button class="mode-toggle" id="mode-toggle" type="button">
+          <i class="ti ti-sparkles" aria-hidden="true"></i>
+          <span>Freedom Mode</span>
+        </button>
+        <button class="logout-btn" id="logout-btn">Log out</button>
+      </div>
     </div>
 
     <div class="content">
@@ -52,9 +67,15 @@
             </div>
           </header>
         <div class="hero">
-          <p class="label">NET WORTH</p>
+          <p class="label" id="hero-networth-label">NET WORTH</p>
           <p class="value" id="hero-networth">$0</p>
           <p class="delta" id="hero-delta"></p>
+        </div>
+        <div class="freedom-impact-card" id="freedom-impact-card" hidden>
+          <p>FINANCIAL FREEDOM</p>
+          <strong id="freedom-impact-value">$0.00</strong>
+          <span id="freedom-impact-copy">Your working plan has not changed yet.</span>
+          <small id="freedom-impact-annual">Annual impact: $0.00</small>
         </div>
         <div class="trend-wrap"><canvas id="trend-chart"></canvas></div>
         <div class="metric-grid">
@@ -242,12 +263,56 @@
 
     <div class="bottom-nav">
       <button class="nav-item active" data-view="overview"><i class="ti ti-chart-donut-2" aria-hidden="true"></i><span>Overview</span></button>
-      <button class="nav-item" data-view="accounts"><i class="ti ti-building-bank" aria-hidden="true"></i><span>Accounts</span></button>
+      <button class="nav-item" data-view="accounts"><i class="ti ti-building-bank" aria-hidden="true"></i><span>Accounts</span><i class="ti ti-lock nav-lock" aria-hidden="true"></i></button>
       <button class="nav-item" data-view="budget"><i class="ti ti-calendar-dollar" aria-hidden="true"></i><span>Plan</span></button>
       <button class="nav-item" data-view="debt"><i class="ti ti-trending-down" aria-hidden="true"></i><span>Debt plan</span></button>
       <button class="nav-item" data-view="weekly"><i class="ti ti-calendar-check" aria-hidden="true"></i><span>Weekly</span></button>
     </div>
   </div>
+</div>
+
+<div class="experience-backdrop" id="accounts-locked-dialog" hidden>
+  <section class="experience-dialog accounts-locked-dialog" role="dialog" aria-modal="true" aria-labelledby="accounts-locked-title">
+    <div class="experience-icon"><i class="ti ti-lock" aria-hidden="true"></i></div>
+    <p class="modal-kicker">FREEDOM MODE</p>
+    <h2 id="accounts-locked-title">Accounts stay grounded in reality</h2>
+    <p>Freedom Mode changes your Working Plan, not your current account balances. Make your plan real—or discard it—to return to Accounts.</p>
+    <button class="btn-primary" id="accounts-locked-close" type="button">Keep exploring</button>
+  </section>
+</div>
+
+<div class="experience-backdrop" id="freedom-intro" hidden>
+  <section class="experience-dialog" role="dialog" aria-modal="true" aria-labelledby="freedom-intro-title">
+    <div class="experience-icon"><i class="ti ti-sparkles" aria-hidden="true"></i></div>
+    <p class="modal-kicker">EXPLORE WHAT'S POSSIBLE</p>
+    <h2 id="freedom-intro-title">Welcome to Freedom Mode</h2>
+    <p>Experiment with your monthly plan and see the impact before making anything permanent.</p>
+    <ul>
+      <li>Adjust planned amounts safely.</li>
+      <li>Watch your financial freedom update live.</li>
+      <li>Nothing is saved until you commit to reality.</li>
+    </ul>
+    <label class="experience-checkbox">
+      <input id="freedom-intro-dismiss" type="checkbox">
+      <span>Don't show this introduction again</span>
+    </label>
+    <button class="btn-primary" id="freedom-intro-continue" type="button">Start exploring</button>
+  </section>
+</div>
+
+<div class="experience-backdrop" id="reality-dialog" hidden>
+  <section class="experience-dialog" role="dialog" aria-modal="true" aria-labelledby="reality-dialog-title">
+    <div class="experience-icon is-reality"><i class="ti ti-world" aria-hidden="true"></i></div>
+    <p class="modal-kicker">RETURN TO REALITY</p>
+    <h2 id="reality-dialog-title">Would you like to commit this plan to reality?</h2>
+    <p id="reality-dialog-summary">Review the impact of your working plan before choosing what happens next.</p>
+    <p class="modal-error" id="reality-dialog-error"></p>
+    <div class="reality-actions">
+      <button class="btn-secondary" id="reality-discard" type="button">Discard</button>
+      <button class="btn-secondary" id="reality-continue" type="button">Keep planning</button>
+      <button class="btn-primary" id="reality-commit" type="button">Commit Plan</button>
+    </div>
+  </section>
 </div>
 
 <div class="modal-backdrop" id="balance-modal" hidden>
@@ -309,6 +374,6 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script type="module" src="app.js?v=9"></script>
+<script type="module" src="app.js?v=14"></script>
 </body>
 </html>
