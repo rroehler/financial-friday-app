@@ -12,7 +12,8 @@
 }
 [hidden] { display: none !important; }
 body, .app-shell, .bottom-nav, .account-panel, .plan-card, .metric-card, .hero {
-  transition: background-color 420ms ease, border-color 420ms ease, box-shadow 420ms ease, color 420ms ease;
+  transition: background-color 520ms ease, border-color 520ms ease, box-shadow 520ms ease, color 520ms ease;
+  transition-delay: var(--atmosphere-delay, 0ms);
 }
 body.freedom-mode {
   --bg: #06051f;
@@ -69,84 +70,49 @@ body.freedom-mode .plan-card-summary-progress.is-healthy > span {
   opacity: 0;
   overflow: hidden;
   background: transparent;
+  --origin-x: 85vw;
+  --origin-y: 48px;
   will-change: opacity;
 }
 .mode-transition::before {
   content: '';
   position: absolute;
-  top: -12%;
-  bottom: -12%;
-  width: 92vw;
+  left: var(--origin-x);
+  top: var(--origin-y);
+  width: 20px;
+  height: 20px;
   opacity: 0;
   border-radius: 50%;
-  filter: blur(46px);
-  backdrop-filter: blur(1.2px) saturate(1.035);
-  -webkit-backdrop-filter: blur(1.2px) saturate(1.035);
+  transform: translate(-50%, -50%) scale(0);
+  filter: blur(22px);
   will-change: transform, opacity;
 }
 .mode-transition.is-active { opacity: 1; }
 .mode-transition.to-freedom::before {
-  left: -100vw;
-  background: radial-gradient(ellipse at center, rgba(76, 99, 214, .075), rgba(31, 41, 124, .025) 42%, transparent 72%);
-  animation: atmosphere-drift-to-freedom 1150ms cubic-bezier(.22,.72,.18,1) both;
+  background: radial-gradient(circle, rgba(86, 112, 255, .16) 0%, rgba(41, 50, 155, .08) 38%, rgba(21, 25, 92, .025) 61%, transparent 76%);
+  animation: atmosphere-expand 980ms cubic-bezier(.2,.76,.24,1) both;
 }
 .mode-transition.to-reality::before {
-  right: -100vw;
-  background: radial-gradient(ellipse at center, rgba(63, 191, 131, .065), rgba(35, 92, 66, .022) 42%, transparent 72%);
-  animation: atmosphere-drift-to-reality 1150ms cubic-bezier(.22,.72,.18,1) both;
+  background: radial-gradient(circle, rgba(63, 191, 131, .14) 0%, rgba(35, 112, 76, .07) 38%, rgba(20, 61, 43, .022) 61%, transparent 76%);
+  animation: atmosphere-expand 980ms cubic-bezier(.2,.76,.24,1) both;
 }
-@keyframes atmosphere-drift-to-freedom {
-  0% { transform: translate3d(0,0,0) scaleX(.92); opacity: 0; }
-  22% { opacity: .42; }
-  58% { opacity: .3; }
-  86% { opacity: .12; }
-  100% { transform: translate3d(210vw,0,0) scaleX(1.08); opacity: 0; }
-}
-@keyframes atmosphere-drift-to-reality {
-  0% { transform: translate3d(0,0,0) scaleX(.92); opacity: 0; }
-  22% { opacity: .38; }
-  58% { opacity: .27; }
-  86% { opacity: .11; }
-  100% { transform: translate3d(-210vw,0,0) scaleX(1.08); opacity: 0; }
-}
-
-/* The browser snapshots both application states and blends them on a shared,
-   eased timeline. A broad feathered atmosphere passes above the snapshots;
-   there is deliberately no visible wipe edge or layout-changing motion. */
-::view-transition-group(root) { animation-duration: 1150ms; }
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 1150ms;
-  animation-timing-function: cubic-bezier(.22,.72,.18,1);
-  animation-fill-mode: both;
-  mix-blend-mode: normal;
-}
-::view-transition-old(root) { animation-name: atmosphere-old; z-index: 1; }
-::view-transition-new(root) { z-index: 2; }
-html.to-freedom::view-transition-new(root) {
-  animation-name: atmosphere-new-freedom;
-}
-html.to-reality::view-transition-new(root) {
-  animation-name: atmosphere-new-reality;
-}
-@keyframes atmosphere-old {
-  0% { opacity: 1; filter: blur(0) saturate(1); }
-  48% { opacity: .62; filter: blur(.45px) saturate(.99); }
-  100% { opacity: 0; filter: blur(1.1px) saturate(.97); }
-}
-@keyframes atmosphere-new-freedom {
-  0% { opacity: 0; filter: blur(1.15px) saturate(.96); transform: scale(1.002); }
-  52% { opacity: .72; filter: blur(.4px) saturate(.99); transform: scale(1.0007); }
-  100% { opacity: 1; filter: blur(0) saturate(1); transform: scale(1); }
-}
-@keyframes atmosphere-new-reality {
-  0% { opacity: 0; filter: blur(1.15px) saturate(.96); transform: scale(1.002); }
-  52% { opacity: .72; filter: blur(.4px) saturate(.99); transform: scale(1.0007); }
-  100% { opacity: 1; filter: blur(0) saturate(1); transform: scale(1); }
+@keyframes atmosphere-expand {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  18% { opacity: .7; }
+  72% { opacity: .32; }
+  100% { transform: translate(-50%, -50%) scale(180); opacity: 0; }
 }
 html.mode-transitioning,
 html.mode-transitioning body { overflow: hidden; }
 html.mode-transitioning .app-shell { pointer-events: none; }
+html.mode-transitioning .app-shell {
+  animation: atmosphere-breathe 980ms cubic-bezier(.2,.76,.24,1) both;
+}
+@keyframes atmosphere-breathe {
+  0%, 100% { transform: scale(1); filter: saturate(1); }
+  38% { transform: scale(.994); filter: saturate(.97); }
+  72% { transform: scale(.997); filter: saturate(1.015); }
+}
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; height: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -237,7 +203,8 @@ button { -webkit-tap-highlight-color: transparent; }
   visibility: hidden;
   pointer-events: none;
   transform: translate3d(0, 6px, 0);
-  transition: opacity 560ms ease, transform 560ms cubic-bezier(.22,.8,.24,1), visibility 0s linear 560ms;
+  transition: opacity 420ms ease, transform 520ms cubic-bezier(.22,.8,.24,1), visibility 0s linear 520ms;
+  transition-delay: var(--atmosphere-delay, 0ms);
 }
 .freedom-banner.is-visible {
   opacity: 1;
@@ -352,11 +319,6 @@ body.freedom-mode .nav-item[data-view="accounts"] .nav-lock { display: block; }
   .mode-toggle span {
     animation: none !important;
     transition-duration: 1ms !important;
-  }
-  ::view-transition-group(root),
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 1ms !important;
   }
 }
 

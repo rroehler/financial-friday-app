@@ -255,26 +255,43 @@ function runModeTransition(targetMode, callback) {
   const enteringFreedom = targetMode === APP_MODES.FREEDOM;
   const directionClass = enteringFreedom ? 'to-freedom' : 'to-reality';
   const root = document.documentElement;
+  const buttonRect = modeToggle.getBoundingClientRect();
+  const originX = buttonRect.left + buttonRect.width / 2;
+  const originY = buttonRect.top + buttonRect.height / 2;
+  const atmosphereTargets = document.querySelectorAll(
+    '.app-shell, .freedom-banner, .topbar, .hero, .metric-card, .feature-header, .plan-summary-card, .plan-card, .bottom-nav, .nav-item, .account-panel'
+  );
+
+  modeTransition.style.setProperty('--origin-x', `${originX}px`);
+  modeTransition.style.setProperty('--origin-y', `${originY}px`);
+  atmosphereTargets.forEach(element => {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.hypot(centerX - originX, centerY - originY);
+    const maxDistance = Math.hypot(window.innerWidth, window.innerHeight);
+    const delay = Math.round(Math.min(360, (distance / maxDistance) * 360));
+    element.style.setProperty('--atmosphere-delay', `${delay}ms`);
+  });
+
   const finish = () => {
     modeTransition.className = 'mode-transition';
     root.classList.remove('mode-transitioning', directionClass);
     modeToggle.classList.remove('is-morphing');
+    atmosphereTargets.forEach(element => element.style.removeProperty('--atmosphere-delay'));
   };
 
   root.classList.add('mode-transitioning', directionClass);
   modeTransition.className = `mode-transition is-active ${directionClass}`;
   modeToggle.classList.add('is-morphing');
 
-  if (typeof document.startViewTransition === 'function') {
-    const transition = document.startViewTransition(() => callback());
-    transition.finished.finally(finish);
-    return;
-  }
-
-  // Unsupported browsers retain fixed geometry and use the same quiet
-  // atmosphere overlay while the state colors ease into place.
-  callback();
-  window.setTimeout(finish, 1200);
+  // Use one live interface throughout the transition. The mode changes once;
+  // distance-based CSS delays make the atmosphere radiate from the button
+  // without rendering or cross-fading a second copy of the application.
+  window.requestAnimationFrame(() => {
+    callback();
+    window.setTimeout(finish, 1050);
+  });
 }
 
 function startFreedomMode() {
