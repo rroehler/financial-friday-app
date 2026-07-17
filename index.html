@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
+<div class="mode-transition" id="mode-transition" aria-hidden="true"></div>
 <div id="app">
   <div class="login-screen" id="login-screen">
     <div class="login-card">
@@ -31,18 +32,20 @@
   </div>
 
   <div class="app-shell" id="app-shell">
-    <div class="freedom-banner" id="freedom-banner" aria-hidden="true">
-      <div class="freedom-banner-copy">
-        <span class="freedom-banner-label">FREEDOM MODE</span>
-        <strong id="freedom-banner-message">Explore what's possible.</strong>
-        <small>Nothing changes until you commit this plan to reality.</small>
-      </div>
-      <button class="freedom-guide-btn" id="freedom-guide-btn" type="button">Guide</button>
-    </div>
     <div class="topbar">
-      <div class="greeting">
-        <p id="greeting-time">Good evening</p>
-        <p>Ryan</p>
+      <div class="identity-slot">
+        <div class="greeting" id="reality-greeting">
+          <p id="greeting-time">Good evening</p>
+          <p>Ryan</p>
+        </div>
+        <button class="freedom-status-card" id="freedom-status-card" type="button" aria-hidden="true" tabindex="-1">
+          <span class="freedom-status-icon" aria-hidden="true"></span>
+          <span class="freedom-status-copy">
+            <strong>Freedom Mode</strong>
+            <small>Planning Session</small>
+          </span>
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+        </button>
       </div>
       <div class="topbar-actions">
         <button class="mode-toggle" id="mode-toggle" type="button">

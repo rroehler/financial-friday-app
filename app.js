@@ -139,10 +139,11 @@ const planEditError = document.getElementById('plan-edit-error');
 const planEditSave = document.getElementById('plan-edit-save');
 const planEditCancel = document.getElementById('plan-edit-cancel');
 const modeToggle = document.getElementById('mode-toggle');
-const freedomBanner = document.getElementById('freedom-banner');
+const freedomStatusCard = document.getElementById('freedom-status-card');
 const freedomIntro = document.getElementById('freedom-intro');
 const realityDialog = document.getElementById('reality-dialog');
 const accountsLockedDialog = document.getElementById('accounts-locked-dialog');
+const modeTransition = document.getElementById('mode-transition');
 
 
 let accountState = { ...EMPTY_ACCOUNTS };
@@ -236,8 +237,8 @@ function setApplicationMode(mode) {
   const isFreedom = mode === APP_MODES.FREEDOM;
 
   document.body.classList.toggle('freedom-mode', isFreedom);
-  freedomBanner.classList.toggle('is-visible', isFreedom);
-  freedomBanner.setAttribute('aria-hidden', String(!isFreedom));
+  freedomStatusCard.setAttribute('aria-hidden', String(!isFreedom));
+  freedomStatusCard.tabIndex = isFreedom ? 0 : -1;
   document.getElementById('freedom-impact-card').hidden = !isFreedom;
   modeToggle.classList.toggle('is-reality', isFreedom);
   modeToggle.querySelector('span').textContent = isFreedom ? 'Make It Real' : 'Freedom Mode';
@@ -254,20 +255,42 @@ function runModeTransition(targetMode, callback) {
   const enteringFreedom = targetMode === APP_MODES.FREEDOM;
   const directionClass = enteringFreedom ? 'to-freedom' : 'to-reality';
   const root = document.documentElement;
+  const buttonRect = modeToggle.getBoundingClientRect();
+  const originX = buttonRect.left + buttonRect.width / 2;
+  const originY = buttonRect.top + buttonRect.height / 2;
+  const atmosphereTargets = document.querySelectorAll(
+    '.app-shell, .identity-slot, .greeting, .freedom-status-card, .topbar, .hero, .metric-card, .feature-header, .plan-summary-card, .plan-card, .bottom-nav, .nav-item, .account-panel'
+  );
+
+  modeTransition.style.setProperty('--origin-x', `${originX}px`);
+  modeTransition.style.setProperty('--origin-y', `${originY}px`);
+  atmosphereTargets.forEach(element => {
+    const rect = element.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.hypot(centerX - originX, centerY - originY);
+    const maxDistance = Math.hypot(window.innerWidth, window.innerHeight);
+    const delay = Math.round(Math.min(360, (distance / maxDistance) * 360));
+    element.style.setProperty('--atmosphere-delay', `${delay}ms`);
+  });
 
   const finish = () => {
+    modeTransition.className = 'mode-transition';
     root.classList.remove('mode-transitioning', directionClass);
     modeToggle.classList.remove('is-morphing');
+    atmosphereTargets.forEach(element => element.style.removeProperty('--atmosphere-delay'));
   };
 
   root.classList.add('mode-transitioning', directionClass);
+  modeTransition.className = `mode-transition is-active ${directionClass}`;
   modeToggle.classList.add('is-morphing');
 
-  // Keep a single, stationary layout. Only state-signaling components animate;
-  // there is no full-screen overlay, duplicated UI, or delayed state reveal.
+  // Use one live interface throughout the transition. The mode changes once;
+  // distance-based CSS delays make the atmosphere radiate from the button
+  // without rendering or cross-fading a second copy of the application.
   window.requestAnimationFrame(() => {
     callback();
-    window.setTimeout(finish, 600);
+    window.setTimeout(finish, 1050);
   });
 }
 
@@ -321,7 +344,6 @@ function renderFreedomImpact() {
   impactValue.className = difference > 0 ? 'is-positive' : difference < 0 ? 'is-negative' : '';
   document.getElementById('freedom-impact-copy').textContent = message;
   document.getElementById('freedom-impact-annual').textContent = `Annual impact: ${difference > 0 ? '+' : difference < 0 ? '-' : ''}${fmt(Math.abs(round2(difference * 12)), 2)}`;
-  document.getElementById('freedom-banner-message').textContent = message;
 }
 
 function openRealityDialog() {
@@ -372,7 +394,7 @@ modeToggle.addEventListener('click', () => {
   else openRealityDialog();
 });
 
-document.getElementById('freedom-guide-btn').addEventListener('click', () => {
+freedomStatusCard.addEventListener('click', () => {
   freedomIntro.hidden = false;
 });
 
