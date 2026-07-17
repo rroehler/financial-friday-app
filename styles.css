@@ -133,7 +133,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .login-error { color: var(--danger); font-size: 13px; text-align: center; min-height: 18px; margin-top: 10px; }
 .app-shell { display: none; flex-direction: column; height: 100%; }
 .app-shell.active { display: flex; }
-.topbar { padding: 18px 20px 4px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.topbar { min-height: 78px; padding: 18px 20px 4px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .topbar-actions { display: flex; align-items: center; gap: 8px; }
 .mode-toggle {
   position: relative;
@@ -187,40 +187,42 @@ button { -webkit-tap-highlight-color: transparent; }
   88% { transform: scale(1.035); box-shadow: 0 0 0 6px rgba(95,126,255,.1), 0 10px 30px rgba(64,87,255,.5); }
   94% { transform: scale(1); }
 }
-.identity-slot { position: relative; flex: 1 1 auto; min-width: 0; height: 42px; }
-.greeting,
-.freedom-status-card {
-  position: absolute;
-  inset: 0 auto auto 0;
-  transition: opacity 360ms ease, transform 480ms cubic-bezier(.22,.8,.24,1), filter 480ms ease;
+.freedom-banner {
+  width: min(300px, 42vw);
+  min-height: 56px;
+  padding: 9px 11px;
+  border: 1px solid rgba(207,216,255,.26);
+  border-radius: 15px;
+  background: linear-gradient(115deg, rgba(10,7,145,.98), rgba(91,117,211,.9));
+  box-shadow: 0 10px 35px rgba(10,7,145,.38);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 3px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(0, 6px, 0);
+  transition: opacity 420ms ease, transform 520ms cubic-bezier(.22,.8,.24,1), visibility 0s linear 520ms;
   transition-delay: var(--atmosphere-delay, 0ms);
 }
-.greeting { opacity: 1; transform: translate3d(0, 0, 0); }
-.freedom-status-card {
-  width: min(250px, 100%);
-  min-height: 42px;
-  padding: 7px 10px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  border: 1px solid rgba(183,198,255,.28);
-  border-radius: 13px;
-  color: #fff;
-  background: linear-gradient(125deg, rgba(10,7,145,.96), rgba(61,83,166,.9));
-  box-shadow: 0 8px 25px rgba(10,7,145,.28);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate3d(-8px, 0, 0) scale(.985);
-  filter: saturate(.9);
-  cursor: pointer;
+.freedom-banner.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0s;
 }
-.freedom-status-icon { width: 9px; height: 9px; flex: 0 0 auto; border-radius: 50%; background: #7795ff; box-shadow: 0 0 0 4px rgba(119,149,255,.12), 0 0 14px rgba(119,149,255,.55); }
-.freedom-status-copy { display: grid; gap: 1px; min-width: 0; text-align: left; }
-.freedom-status-copy strong { font-size: 12px; line-height: 1.1; }
-.freedom-status-copy small { color: #bdc8ef; font-size: 9px; line-height: 1.1; letter-spacing: .04em; }
-.freedom-status-card > i { margin-left: auto; color: #aebcff; font-size: 15px; }
-body.freedom-mode .greeting { opacity: 0; pointer-events: none; transform: translate3d(8px, 0, 0) scale(.985); filter: saturate(.9); }
-body.freedom-mode .freedom-status-card { opacity: 1; pointer-events: auto; transform: translate3d(0, 0, 0) scale(1); filter: saturate(1); }
+.freedom-banner-heading { color: #e3e7ff; font-size: 10px; font-weight: 800; letter-spacing: .04em; white-space: nowrap; }
+.freedom-banner-summary { color: #fff; font-size: 11px; font-weight: 700; text-align: right; white-space: nowrap; }
+.freedom-banner-impact { color: #cad3ff; font-size: 10px; font-weight: 650; white-space: nowrap; }
+.freedom-banner-impact.is-positive { color: #8ff0c3; }
+.freedom-banner-impact.is-negative { color: #ffb0b0; }
+.freedom-banner-review { color: #dfe5ff; font-size: 9px; font-weight: 650; text-align: right; white-space: nowrap; }
+.freedom-banner-review i { font-size: 12px; vertical-align: -1px; }
 .freedom-impact-card {
   margin: 4px auto 18px;
   max-width: 520px;
@@ -309,8 +311,55 @@ body.freedom-mode .nav-item[data-view="accounts"] .nav-lock { display: block; }
   .topbar-actions { flex-direction: column; align-items: flex-end; gap: 5px; }
   .mode-toggle { padding: 7px 10px; font-size: 10px; }
   .mode-toggle.is-reality { padding: 9px 13px; font-size: 12px; }
-  .identity-slot { height: 40px; }
-  .freedom-status-card { width: min(190px, 100%); min-height: 40px; }
+  .freedom-banner { width: min(52vw, 220px); padding: 8px 9px; column-gap: 7px; }
+  .freedom-banner-heading { font-size: 9px; }
+  .freedom-banner-summary { font-size: 10px; }
+  .freedom-banner-impact { font-size: 9px; }
+  .freedom-banner-review { font-size: 8px; }
+}
+
+.working-plan-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+  background: rgba(2, 3, 12, .7);
+  backdrop-filter: blur(9px);
+}
+.working-plan-panel {
+  position: relative;
+  width: min(420px, 100%);
+  height: 100%;
+  overflow-y: auto;
+  padding: 22px;
+  border: 1px solid rgba(191, 204, 255, .22);
+  border-radius: 24px;
+  background: linear-gradient(155deg, #111044, #090826 72%);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .58);
+}
+.working-plan-panel .sheet-handle { display: none; }
+.working-plan-panel h2 { margin: 5px 0 8px; font-size: 25px; }
+.working-plan-lead { margin: 0 0 18px; color: #b7c0df; font-size: 12px; line-height: 1.5; }
+.working-plan-list { display: grid; gap: 8px; }
+.working-plan-change { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px; border: 1px solid rgba(190,202,255,.12); border-radius: 13px; background: rgba(255,255,255,.035); }
+.working-plan-change div { display: grid; gap: 3px; }
+.working-plan-change strong { font-size: 12px; }
+.working-plan-change span { color: #929dc7; font-size: 10px; }
+.working-plan-change > strong { white-space: nowrap; }
+.working-plan-change .is-positive, .working-plan-total strong.is-positive { color: #8ff0c3; }
+.working-plan-change .is-negative, .working-plan-total strong.is-negative { color: #ffb0b0; }
+.working-plan-empty { display: grid; justify-items: center; gap: 8px; padding: 30px 12px; color: #8996c7; font-size: 12px; }
+.working-plan-empty i { font-size: 25px; }
+.working-plan-total { display: flex; justify-content: space-between; gap: 16px; margin-top: 18px; padding: 15px 0; border-top: 1px solid rgba(190,202,255,.16); color: #aeb8db; font-size: 11px; }
+.working-plan-total strong { color: #fff; font-size: 14px; }
+.working-plan-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 6px; }
+.working-plan-actions .btn-primary { margin: 0; }
+@media (max-width: 639px) {
+  .working-plan-backdrop { align-items: flex-end; padding: 0; }
+  .working-plan-panel { width: 100%; height: auto; max-height: calc(100dvh - 20px); padding: 14px 18px calc(18px + env(safe-area-inset-bottom)); border-radius: 24px 24px 0 0; }
+  .working-plan-panel .sheet-handle { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -319,9 +368,7 @@ body.freedom-mode .nav-item[data-view="accounts"] .nav-lock { display: block; }
   .mode-transition::after,
   .mode-toggle,
   .mode-toggle i,
-  .mode-toggle span,
-  .greeting,
-  .freedom-status-card {
+  .mode-toggle span {
     animation: none !important;
     transition-duration: 1ms !important;
   }

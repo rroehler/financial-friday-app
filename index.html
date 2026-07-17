@@ -33,20 +33,16 @@
 
   <div class="app-shell" id="app-shell">
     <div class="topbar">
-      <div class="identity-slot">
-        <div class="greeting" id="reality-greeting">
-          <p id="greeting-time">Good evening</p>
-          <p>Ryan</p>
-        </div>
-        <button class="freedom-status-card" id="freedom-status-card" type="button" aria-hidden="true" tabindex="-1">
-          <span class="freedom-status-icon" aria-hidden="true"></span>
-          <span class="freedom-status-copy">
-            <strong>Freedom Mode</strong>
-            <small>Planning Session</small>
-          </span>
-          <i class="ti ti-info-circle" aria-hidden="true"></i>
-        </button>
+      <div class="greeting" id="reality-greeting">
+        <p id="greeting-time">Good evening</p>
+        <p>Ryan</p>
       </div>
+      <button class="freedom-banner" id="freedom-banner" type="button" aria-hidden="true" aria-label="Review Working Plan">
+        <span class="freedom-banner-heading"><span aria-hidden="true">&#128309;</span> Freedom Mode</span>
+        <span class="freedom-banner-summary" id="freedom-banner-summary">No pending changes</span>
+        <span class="freedom-banner-impact" id="freedom-banner-impact">Start editing your plan</span>
+        <span class="freedom-banner-review" id="freedom-banner-review">View Working Plan <i class="ti ti-arrow-right" aria-hidden="true"></i></span>
+      </button>
       <div class="topbar-actions">
         <button class="mode-toggle" id="mode-toggle" type="button">
           <i class="ti ti-sparkles" aria-hidden="true"></i>
@@ -280,6 +276,27 @@
     <h2 id="accounts-locked-title">Accounts stay grounded in reality</h2>
     <p>Freedom Mode changes your Working Plan, not your current account balances. Make your plan real—or discard it—to return to Accounts.</p>
     <button class="btn-primary" id="accounts-locked-close" type="button">Keep exploring</button>
+  </section>
+</div>
+
+<div class="working-plan-backdrop" id="working-plan-review" hidden>
+  <section class="working-plan-panel" role="dialog" aria-modal="true" aria-labelledby="working-plan-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <button class="modal-close" id="working-plan-close" type="button" aria-label="Close Working Plan review">
+      <i class="ti ti-x" aria-hidden="true"></i>
+    </button>
+    <p class="modal-kicker">FREEDOM MODE</p>
+    <h2 id="working-plan-title">Working Plan</h2>
+    <p class="working-plan-lead" id="working-plan-lead">No pending changes yet.</p>
+    <div class="working-plan-list" id="working-plan-list"></div>
+    <div class="working-plan-total">
+      <span>Net monthly impact</span>
+      <strong id="working-plan-total">$0.00/month</strong>
+    </div>
+    <div class="working-plan-actions">
+      <button class="btn-secondary" id="working-plan-go-plan" type="button">Go to Plan</button>
+      <button class="btn-primary" id="working-plan-make-real" type="button">Make It Real</button>
+    </div>
   </section>
 </div>
 

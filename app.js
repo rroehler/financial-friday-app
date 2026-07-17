@@ -139,11 +139,13 @@ const planEditError = document.getElementById('plan-edit-error');
 const planEditSave = document.getElementById('plan-edit-save');
 const planEditCancel = document.getElementById('plan-edit-cancel');
 const modeToggle = document.getElementById('mode-toggle');
-const freedomStatusCard = document.getElementById('freedom-status-card');
+const freedomBanner = document.getElementById('freedom-banner');
 const freedomIntro = document.getElementById('freedom-intro');
 const realityDialog = document.getElementById('reality-dialog');
 const accountsLockedDialog = document.getElementById('accounts-locked-dialog');
 const modeTransition = document.getElementById('mode-transition');
+const realityGreeting = document.getElementById('reality-greeting');
+const workingPlanReview = document.getElementById('working-plan-review');
 
 
 let accountState = { ...EMPTY_ACCOUNTS };
@@ -185,6 +187,28 @@ function getFreedomMessage(difference = getFreedomDifference()) {
   if (difference > 0) return `You have increased your financial freedom by ${fmt(difference, 2)} for this month.`;
   if (difference < 0) return `You have decreased your financial freedom by ${fmt(Math.abs(difference), 2)} for this month.`;
   return 'Your working plan has not changed your financial freedom yet.';
+}
+
+function getPendingPlanChanges() {
+  if (!appState.workingPlan) return [];
+
+  return PLAN_SECTIONS.flatMap(section => section.categories).reduce((changes, category) => {
+    const fieldKey = `mb-${category.section}-${category.item}-budgeted`;
+    const realityRaw = Number(appState.realityPlan[fieldKey]);
+    const workingRaw = Number(appState.workingPlan[fieldKey]);
+    const realityValue = round2(Number.isFinite(realityRaw) ? realityRaw : category.defaultPlanned);
+    const workingValue = round2(Number.isFinite(workingRaw) ? workingRaw : category.defaultPlanned);
+    if (realityValue === workingValue) return changes;
+
+    changes.push({
+      key: fieldKey,
+      label: category.label,
+      realityValue,
+      workingValue,
+      impact: round2(realityValue - workingValue)
+    });
+    return changes;
+  }, []);
 }
 
 function normalizeAccounts(data = {}) {
@@ -237,8 +261,9 @@ function setApplicationMode(mode) {
   const isFreedom = mode === APP_MODES.FREEDOM;
 
   document.body.classList.toggle('freedom-mode', isFreedom);
-  freedomStatusCard.setAttribute('aria-hidden', String(!isFreedom));
-  freedomStatusCard.tabIndex = isFreedom ? 0 : -1;
+  realityGreeting.hidden = isFreedom;
+  freedomBanner.classList.toggle('is-visible', isFreedom);
+  freedomBanner.setAttribute('aria-hidden', String(!isFreedom));
   document.getElementById('freedom-impact-card').hidden = !isFreedom;
   modeToggle.classList.toggle('is-reality', isFreedom);
   modeToggle.querySelector('span').textContent = isFreedom ? 'Make It Real' : 'Freedom Mode';
@@ -259,7 +284,7 @@ function runModeTransition(targetMode, callback) {
   const originX = buttonRect.left + buttonRect.width / 2;
   const originY = buttonRect.top + buttonRect.height / 2;
   const atmosphereTargets = document.querySelectorAll(
-    '.app-shell, .identity-slot, .greeting, .freedom-status-card, .topbar, .hero, .metric-card, .feature-header, .plan-summary-card, .plan-card, .bottom-nav, .nav-item, .account-panel'
+    '.app-shell, .freedom-banner, .topbar, .hero, .metric-card, .feature-header, .plan-summary-card, .plan-card, .bottom-nav, .nav-item, .account-panel'
   );
 
   modeTransition.style.setProperty('--origin-x', `${originX}px`);
@@ -312,6 +337,7 @@ function returnToReality({ discard = false, animate = true } = {}) {
     appState.workingPlan = null;
     appState.hasPendingChanges = false;
     realityDialog.hidden = true;
+    closeWorkingPlanReview();
     setApplicationMode(APP_MODES.REALITY);
   };
 
@@ -331,6 +357,7 @@ function resetPlanningSession({ clearData = false } = {}) {
   realityDialog.hidden = true;
   freedomIntro.hidden = true;
   accountsLockedDialog.hidden = true;
+  closeWorkingPlanReview();
   setApplicationMode(APP_MODES.REALITY);
 }
 
@@ -344,6 +371,66 @@ function renderFreedomImpact() {
   impactValue.className = difference > 0 ? 'is-positive' : difference < 0 ? 'is-negative' : '';
   document.getElementById('freedom-impact-copy').textContent = message;
   document.getElementById('freedom-impact-annual').textContent = `Annual impact: ${difference > 0 ? '+' : difference < 0 ? '-' : ''}${fmt(Math.abs(round2(difference * 12)), 2)}`;
+  renderWorkingPlanStatus();
+}
+
+function formatSignedMonthly(value) {
+  const sign = value > 0 ? '+' : value < 0 ? '-' : '';
+  return `${sign}${fmt(Math.abs(value), 2)}/month`;
+}
+
+function renderWorkingPlanStatus() {
+  if (appState.mode !== APP_MODES.FREEDOM) return;
+
+  const changes = getPendingPlanChanges();
+  const difference = getFreedomDifference();
+  const summary = document.getElementById('freedom-banner-summary');
+  const impact = document.getElementById('freedom-banner-impact');
+  const reviewLink = document.getElementById('freedom-banner-review');
+
+  summary.textContent = changes.length
+    ? `${changes.length} pending ${changes.length === 1 ? 'change' : 'changes'}`
+    : 'No pending changes';
+  impact.textContent = changes.length ? formatSignedMonthly(difference) : 'Start editing your plan';
+  impact.className = `freedom-banner-impact ${difference > 0 ? 'is-positive' : difference < 0 ? 'is-negative' : ''}`;
+  reviewLink.hidden = changes.length === 0;
+
+  renderWorkingPlanReview(changes, difference);
+}
+
+function renderWorkingPlanReview(changes = getPendingPlanChanges(), difference = getFreedomDifference()) {
+  const list = document.getElementById('working-plan-list');
+  const lead = document.getElementById('working-plan-lead');
+  const total = document.getElementById('working-plan-total');
+
+  lead.textContent = changes.length
+    ? `${changes.length} consolidated ${changes.length === 1 ? 'change' : 'changes'} in this Working Plan.`
+    : 'No pending changes yet. Start on the Plan tab to explore what is possible.';
+  list.innerHTML = changes.length
+    ? changes.map(change => `
+      <article class="working-plan-change">
+        <div>
+          <strong>${change.label}</strong>
+          <span>${fmt(change.realityValue, 2)} &rarr; ${fmt(change.workingValue, 2)}</span>
+        </div>
+        <strong class="${change.impact > 0 ? 'is-positive' : 'is-negative'}">${formatSignedMonthly(change.impact)}</strong>
+      </article>
+    `).join('')
+    : '<div class="working-plan-empty"><i class="ti ti-pencil" aria-hidden="true"></i><span>Your edits will appear here.</span></div>';
+  total.textContent = formatSignedMonthly(difference);
+  total.className = difference > 0 ? 'is-positive' : difference < 0 ? 'is-negative' : '';
+}
+
+function openWorkingPlanReview() {
+  if (appState.mode !== APP_MODES.FREEDOM) return;
+  renderWorkingPlanStatus();
+  workingPlanReview.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeWorkingPlanReview() {
+  workingPlanReview.hidden = true;
+  document.body.style.overflow = '';
 }
 
 function openRealityDialog() {
@@ -394,8 +481,18 @@ modeToggle.addEventListener('click', () => {
   else openRealityDialog();
 });
 
-freedomStatusCard.addEventListener('click', () => {
-  freedomIntro.hidden = false;
+freedomBanner.addEventListener('click', openWorkingPlanReview);
+document.getElementById('working-plan-close').addEventListener('click', closeWorkingPlanReview);
+document.getElementById('working-plan-go-plan').addEventListener('click', () => {
+  closeWorkingPlanReview();
+  document.querySelector('.nav-item[data-view="budget"]')?.click();
+});
+document.getElementById('working-plan-make-real').addEventListener('click', () => {
+  closeWorkingPlanReview();
+  openRealityDialog();
+});
+workingPlanReview.addEventListener('click', event => {
+  if (event.target === workingPlanReview) closeWorkingPlanReview();
 });
 
 document.getElementById('freedom-intro-continue').addEventListener('click', () => {
@@ -812,11 +909,10 @@ async function savePlanEdit() {
 
   if (appState.mode === APP_MODES.FREEDOM) {
     appState.workingPlan[fieldKey] = nextValue;
-    appState.hasPendingChanges = Object.keys(appState.workingPlan).some(
-      key => key.endsWith('-budgeted') && appState.workingPlan[key] !== appState.realityPlan[key]
-    );
+    appState.hasPendingChanges = getPendingPlanChanges().length > 0;
     lastUpdatedPlanKey = categoryKey;
     renderPlan();
+    renderFreedomImpact();
     renderTopSpending();
     renderOverviewAccountSummary();
     renderTrendChart();
