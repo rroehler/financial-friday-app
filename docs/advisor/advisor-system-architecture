@@ -1,0 +1,587 @@
+# Advisor System Architecture
+
+## Purpose
+
+The Advisor System Architecture defines the major software components that implement the Advisor Intelligence Specification (AIS).
+
+Its purpose is to translate the Advisor's reasoning model into a modular, scalable, and maintainable software architecture.
+
+This document intentionally focuses on responsibilities rather than implementation details.
+
+Future implementation may use different technologies, programming languages, or deployment strategies without altering the architectural principles defined here.
+
+---
+
+## Guiding Principle
+
+Every architectural component should have a single, clearly defined responsibility.
+
+Components should collaborate through well-defined interfaces while remaining independently testable, maintainable, and replaceable.
+
+The architecture should faithfully implement the Advisor Intelligence Specification without embedding business logic into infrastructure concerns.
+
+---
+
+## High-Level System Architecture
+
+The following diagram illustrates the current high-level architecture of the Financial Friday Advisor. It is intended to provide a conceptual view of the major components and their interactions.
+
+As the architecture evolves throughout this sprint, this diagram will be updated to reflect the current design.
+
+```mermaid
+flowchart TD
+    A[User Request] --> B[Context Builder]
+    B --> C[Advisor Engine]
+
+    C --> D[Memory Engine]
+    C --> E[Behavior Engine]
+    C --> F[Goal Engine]
+
+    D --> G[Story Engine]
+    E --> G
+    F --> G
+
+    G --> H[Operating Mode Engine]
+    H --> I[Recommendation Engine]
+    I --> J[Evidence Engine]
+    J --> K[Confidence Engine]
+    K --> L[Priority Engine]
+    L --> M[Transparency Engine]
+    M --> N[Response Builder]
+    N --> O[User Response]
+```
+
+---
+
+## Architectural Overview
+
+The Financial Friday Advisor is designed as an orchestrated system of specialized components rather than a single monolithic engine.
+
+Each component has a single, well-defined responsibility and communicates through clearly defined interfaces. The Advisor Engine coordinates the overall reasoning process while delegating specialized tasks—such as memory retrieval, behavioral analysis, recommendation generation, and transparency—to dedicated components.
+
+This modular architecture improves maintainability, testability, and extensibility while ensuring the implementation remains faithful to the Advisor Intelligence Specification.
+
+---
+
+## Context Builder
+
+### Purpose
+
+The Context Builder is responsible for assembling the information required by the Advisor before the reasoning process begins.
+
+It acts as the entry point into the Advisor architecture, transforming a user request and available financial information into a consistent, structured Advisor Context.
+
+This ensures that downstream components receive the information they need without independently retrieving or interpreting raw data.
+
+### Responsibilities
+
+- Receive the user request and session information
+- Identify the user associated with the request
+- Retrieve relevant user profile information
+- Retrieve current financial data
+- Retrieve active goals and goal progress
+- Retrieve relevant financial story entries
+- Retrieve behavioral insights and patterns
+- Retrieve recent interactions and recommendations
+- Retrieve the current or recently active operating mode
+- Identify missing, outdated, or conflicting information
+- Assemble the retrieved information into a structured Advisor Context
+- Provide the Advisor Context to the Advisor Engine
+
+### Does Not
+
+- Generate financial recommendations
+- Rank or prioritize recommendations
+- Calculate recommendation confidence
+- Determine the final operating mode
+- Perform behavioral analysis
+- Modify the Financial Story
+- Update goals or financial records
+- Construct the final user response
+
+### Inputs
+
+- User request
+- User identifier
+- Session context
+- Available request metadata
+
+### Outputs
+
+- Advisor Context
+- Context completeness status
+- Missing-information indicators
+- Data freshness indicators
+- Identified context conflicts
+
+### Dependencies
+
+The Context Builder may retrieve information from:
+
+- User Profile data
+- Financial data sources
+- Memory Engine
+- Behavior Engine
+- Goal Engine
+- Story Engine
+- Recommendation history
+- Session history
+
+The Context Builder should access these dependencies through defined interfaces rather than directly depending on their storage implementations.
+
+### Failure Handling
+
+If required information cannot be retrieved, the Context Builder should not invent or silently assume missing facts.
+
+Instead, it should:
+
+- Record which information is unavailable
+- Distinguish required information from optional information
+- Preserve known data even when other sources fail
+- Mark potentially outdated information
+- Report conflicting information
+- Allow the Advisor Engine to determine whether reasoning can continue
+- Support clarification requests when additional user input is necessary
+
+### Design Principle
+
+The Context Builder gathers and organizes information; it does not make financial decisions.
+
+Its output should provide a reliable snapshot of what the Advisor currently knows, what it does not know, and how trustworthy or current that information is.
+
+---
+
+## Advisor Engine
+
+### Purpose
+
+The Advisor Engine is the central orchestrator of the Financial Friday Advisor.
+
+It coordinates the reasoning process by directing specialized components, collecting their results, and producing a complete recommendation workflow. The Advisor Engine contains orchestration logic but does not perform specialized financial analysis itself.
+
+### Responsibilities
+
+- Receive the Advisor Context from the Context Builder
+- Coordinate the overall reasoning workflow
+- Invoke specialized Advisor components in the appropriate order
+- Manage information flow between components
+- Detect workflow failures and incomplete results
+- Assemble the completed recommendation package
+- Forward the completed package to the Response Builder
+
+### Does Not
+
+- Store long-term memory
+- Analyze behavior
+- Manage goals
+- Generate recommendations directly
+- Rank recommendations
+- Calculate confidence
+- Generate explanations
+- Format the final user response
+
+### Inputs
+
+- Advisor Context
+
+### Outputs
+
+- Completed Recommendation Package
+
+### Dependencies
+
+- Memory Engine
+- Behavior Engine
+- Goal Engine
+- Story Engine
+- Operating Mode Engine
+- Recommendation Engine
+- Evidence Engine
+- Confidence Engine
+- Priority Engine
+- Transparency Engine
+
+### Design Principle
+
+The Advisor Engine coordinates the reasoning process while delegating specialized work to dedicated components.
+
+---
+
+## Memory Engine
+
+### Purpose
+
+Maintains and retrieves long-term user knowledge used by the Advisor.
+
+### Responsibilities
+
+- Store long-term user information
+- Retrieve relevant memories
+- Update persistent knowledge
+- Provide contextual history
+
+### Does Not
+
+- Generate recommendations
+- Analyze behavior
+- Prioritize recommendations
+
+### Inputs
+
+- Advisor Context
+
+### Outputs
+
+- Relevant User Memory
+
+### Design Principle
+
+Acts as the Advisor's long-term memory without participating in decision making.
+
+---
+
+## Behavior Engine
+
+### Purpose
+
+Analyze financial behaviors, habits, and patterns to improve recommendations.
+
+### Responsibilities
+
+- Detect behavioral trends
+- Identify recurring habits
+- Recognize spending patterns
+- Estimate behavioral risks
+
+### Does Not
+
+- Recommend actions
+- Rank recommendations
+- Store long-term memory
+
+### Inputs
+
+- Financial history
+- User activity
+
+### Outputs
+
+- Behavioral Insights
+
+### Design Principle
+
+Provides behavioral understanding without making financial decisions.
+
+---
+
+## Goal Engine
+
+### Purpose
+
+Evaluate the user's goals, progress, dependencies, and conflicts.
+
+### Responsibilities
+
+- Load active goals
+- Measure progress
+- Detect conflicts
+- Evaluate priorities
+- Identify opportunities
+
+### Does Not
+
+- Generate recommendations
+- Explain recommendations
+
+### Inputs
+
+- Goals
+- Financial data
+
+### Outputs
+
+- Goal Analysis
+
+### Design Principle
+
+Represents what the user wants to achieve rather than how to achieve it.
+
+---
+
+## Story Engine
+
+### Purpose
+
+Maintain the user's Financial Story and provide life context during reasoning.
+
+### Responsibilities
+
+- Retrieve Financial Story
+- Update story events
+- Track milestones
+- Provide historical context
+
+### Does Not
+
+- Generate recommendations
+- Analyze goals
+- Calculate confidence
+
+### Inputs
+
+- Advisor Context
+
+### Outputs
+
+- Financial Story Context
+
+### Design Principle
+
+Provides narrative context that complements financial data.
+
+---
+
+## Operating Mode Engine
+
+### Purpose
+
+Determine the Advisor's current operating mode.
+
+### Responsibilities
+
+- Evaluate user circumstances
+- Detect emergencies
+- Detect opportunities
+- Select primary mode
+- Select secondary mode
+
+### Does Not
+
+- Generate recommendations
+- Prioritize recommendations
+
+### Inputs
+
+- Advisor Context
+
+### Outputs
+
+- Active Operating Mode
+
+### Design Principle
+
+Adjusts Advisor behavior without changing its principles.
+
+---
+
+## Recommendation Engine
+
+### Purpose
+
+Generate candidate financial recommendations.
+
+### Responsibilities
+
+- Produce possible recommendations
+- Identify alternatives
+- Evaluate available actions
+
+### Does Not
+
+- Rank recommendations
+- Calculate confidence
+- Explain recommendations
+
+### Inputs
+
+- Advisor Context
+
+### Outputs
+
+- Candidate Recommendations
+
+### Design Principle
+
+Focuses on generating possibilities rather than selecting winners.
+
+---
+
+## Evidence Engine
+
+### Purpose
+
+Evaluate the quality and relevance of evidence supporting each recommendation.
+
+### Responsibilities
+
+- Evaluate evidence strength
+- Identify supporting information
+- Detect conflicting evidence
+
+### Does Not
+
+- Generate recommendations
+- Rank recommendations
+
+### Inputs
+
+- Candidate Recommendations
+
+### Outputs
+
+- Evidence Evaluation
+
+### Design Principle
+
+Ensures recommendations are supported by reliable information.
+
+---
+
+## Confidence Engine
+
+### Purpose
+
+Measure the Advisor's confidence in each recommendation.
+
+### Responsibilities
+
+- Evaluate certainty
+- Detect missing information
+- Measure recommendation reliability
+
+### Does Not
+
+- Generate recommendations
+- Prioritize recommendations
+
+### Inputs
+
+- Candidate Recommendations
+- Evidence Evaluation
+
+### Outputs
+
+- Confidence Scores
+
+### Design Principle
+
+Quantifies certainty without changing recommendation content.
+
+---
+
+## Priority Engine
+
+### Purpose
+
+Determine which recommendations should be presented first.
+
+### Responsibilities
+
+- Rank recommendations
+- Balance urgency and impact
+- Consider confidence
+- Consider user priorities
+
+### Does Not
+
+- Generate recommendations
+- Explain recommendations
+
+### Inputs
+
+- Candidate Recommendations
+- Confidence Scores
+
+### Outputs
+
+- Prioritized Recommendations
+
+### Design Principle
+
+Ranks recommendations using impact, urgency, user goals, and confidence.
+
+---
+
+## Transparency Engine
+
+### Purpose
+
+Generate clear explanations describing why recommendations were made.
+
+### Responsibilities
+
+- Explain reasoning
+- Reference supporting evidence
+- Adjust explanation depth
+- Communicate uncertainty
+
+### Does Not
+
+- Generate recommendations
+- Rank recommendations
+
+### Inputs
+
+- Prioritized Recommendations
+
+### Outputs
+
+- Recommendation Explanations
+
+### Design Principle
+
+Makes the Advisor understandable rather than mysterious.
+
+---
+
+## Response Builder
+
+### Purpose
+
+Construct the final response presented to the user.
+
+### Responsibilities
+
+- Assemble recommendations
+- Include explanations
+- Format responses
+- Prepare follow-up questions
+- Ensure consistent presentation
+
+### Does Not
+
+- Generate recommendations
+- Analyze finances
+- Modify user data
+
+### Inputs
+
+- Recommendation Package
+
+### Outputs
+
+- User Response
+
+### Design Principle
+
+Responsible only for presentation, never financial reasoning.
+
+---
+
+# Design Decisions
+
+(To be completed throughout implementation.)
+
+---
+
+# Open Questions
+
+(To be completed throughout implementation.)
+
+---
+
+# Future Considerations
+
+Enhancements and architectural ideas that are intentionally deferred to future versions of Financial Friday.
+
+---

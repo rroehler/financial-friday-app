@@ -1,0 +1,182 @@
+# Financial Friday Roadmap
+
+## Purpose
+
+The Financial Friday Roadmap provides a high-level view of the project's evolution from concept to production.
+
+It defines the major milestones, objectives, and deliverables for each version while communicating the long-term vision of Financial Friday.
+
+The roadmap is intended to guide development rather than prescribe exact implementation details. Milestones may evolve as the project grows and new insights are gained.
+
+---
+
+# Guiding Principle
+
+Build the right foundation before building features.
+
+Each milestone should reduce uncertainty and prepare the project for the next stage of development.
+
+---
+
+# Project Vision
+
+Financial Friday is being built to become the world's most trusted AI financial advisor.
+
+The roadmap reflects a philosophy of building intelligence first, followed by architecture, implementation, integration, and continuous improvement.
+
+---
+
+# Roadmap
+
+| Version | Milestone                                | Status         |
+| ------- | ---------------------------------------- | -------------- |
+| v0.1.0  | Initial Application Foundation           | ✅ Complete    |
+| v0.2.0  | Core Financial Features                  | ✅ Complete    |
+| v0.3.0  | User Experience Improvements             | ✅ Complete    |
+| v0.4.0  | AI Vision & Product Direction            | ✅ Complete    |
+| v0.5.0  | Advisor Intelligence Specification (AIS) | 🚧 In Progress |
+| v0.6.0  | Advisor Architecture Blueprint           | Planned        |
+| v0.7.0  | Advisor Kernel Implementation            | Planned        |
+| v0.8.0  | Data Layer & Financial Integrations      | Planned        |
+| v0.9.0  | Advisor MVP                              | Planned        |
+| v1.0.0  | Public Release                           | Planned        |
+
+---
+
+# Milestone Overview
+
+## v0.5.0 — Advisor Intelligence Specification
+
+### Objective
+
+Define how the Advisor should think.
+
+### Deliverables
+
+- Financial Friday Constitution
+- Vision & Mission
+- Advisor Intelligence Specification (AIS)
+- Codebase Audit
+
+---
+
+## v0.6.0 — Advisor Architecture Blueprint
+
+### Objective
+
+Design how the Advisor will be built.
+
+### Deliverables
+
+- Advisor System Architecture
+- Recommendation Pipeline
+- Domain Model
+- Core Data Objects
+- Engine Interfaces
+- Sequence Diagrams
+- Advisor Architecture Blueprint
+
+---
+
+## v0.7.0 — Advisor Kernel
+
+### Objective
+
+Implement the Advisor's core reasoning engine.
+
+### Deliverables
+
+- Advisor orchestration
+- Recommendation engine
+- Priority engine
+- Confidence engine
+- Transparency engine
+- Memory engine
+- Goal engine
+- Story engine
+- Operating mode engine
+
+---
+
+## v0.8.0 — Data Layer & Financial Integrations
+
+### Objective
+
+Connect the Advisor to real financial information.
+
+### Deliverables
+
+- Account aggregation
+- Transaction ingestion
+- Budget synchronization
+- Investment data
+- Categorization improvements
+- Historical financial storage
+
+---
+
+## v0.9.0 — Advisor MVP
+
+### Objective
+
+Deliver the first complete end-to-end Advisor experience.
+
+### Deliverables
+
+- Advisor chat interface
+- Personalized recommendations
+- Goal management
+- Financial story
+- Emergency mode
+- Opportunity detection
+- Transparency explanations
+- End-to-end testing
+
+---
+
+## v1.0.0 — Public Release
+
+### Objective
+
+Release Financial Friday as a production-ready AI financial advisor.
+
+### Deliverables
+
+- Production infrastructure
+- Security hardening
+- Performance optimization
+- Comprehensive testing
+- Documentation
+- Public launch
+
+---
+
+# Long-Term Vision
+
+Following Version 1.0, Financial Friday will continue evolving through incremental releases focused on:
+
+- Expanded financial institution support
+- Improved personalization
+- Advanced forecasting
+- Tax planning
+- Retirement planning
+- Business finance
+- Family financial management
+- AI model improvements
+- Continuous recommendation refinement
+
+---
+
+# Success Philosophy
+
+Financial Friday measures success by improving users' financial well-being rather than simply delivering software features.
+
+Every milestone should move the Advisor closer to becoming a trusted, transparent, and intelligent financial partner.
+
+---
+
+# Roadmap Maintenance
+
+The roadmap is a living document.
+
+As priorities evolve and new capabilities emerge, milestones may be refined while remaining faithful to the Financial Friday Constitution, Vision & Mission, and Advisor Intelligence Specification.

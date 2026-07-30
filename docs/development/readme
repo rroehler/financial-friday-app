@@ -1,0 +1,46 @@
+# Development
+
+## Purpose
+
+The Development documentation supports the implementation of Financial Friday.
+
+Unlike the Foundation and Advisor documentation, which define the product and its architecture, the Development documents capture the day-to-day engineering process.
+
+Topics include:
+
+- Sprint planning
+- Meeting notes
+- Architectural decisions
+- Product decisions
+- Coding standards
+- Release history
+
+---
+
+# Sections
+
+## Architecture
+
+Working architectural notes and Architecture Decision Records (ADRs).
+
+## Meetings
+
+Meeting notes and design discussions.
+
+## Planning
+
+Sprint planning, feature backlog, and implementation planning.
+
+## Product
+
+Product-related decisions, copy, branding, and design philosophy.
+
+## Release Notes
+
+Project changelog and release history.
+
+---
+
+# Guiding Principle
+
+Development documentation should explain _why_ engineering decisions were made, not simply record _what_ changed.

@@ -1,0 +1,154 @@
+# Advisor
+
+## Purpose
+
+The Advisor documents define **how Financial Friday thinks**.
+
+Building upon the principles established in the Foundation documents, these specifications describe the Advisor's intelligence, architecture, reasoning process, and technical design.
+
+Together, they serve as the engineering blueprint for implementing a transparent, trustworthy, and intelligent AI financial advisor.
+
+These documents are implementation-focused and should evolve alongside the Advisor while remaining consistent with the Constitution and Vision & Mission.
+
+---
+
+# Documents
+
+## Advisor Intelligence Specification (AIS)
+
+Defines the Advisor's reasoning model and behavioral framework.
+
+Topics include:
+
+- Recommendation framework
+- Goal management
+- Financial story
+- Operating modes
+- Memory model
+- Confidence evaluation
+- Transparency
+- Ethical boundaries
+- Decision flow
+- Continuous improvement
+
+---
+
+## Advisor System Architecture
+
+Defines the major software components that implement the Advisor Intelligence Specification.
+
+Topics include:
+
+- System architecture
+- Core components
+- Component responsibilities
+- Architectural principles
+- High-level interactions
+
+---
+
+## Recommendation Pipeline
+
+Defines how a user request moves through the Advisor from initial input to final response.
+
+Topics include:
+
+- Processing pipeline
+- Context building
+- Recommendation generation
+- Evidence evaluation
+- Confidence calculation
+- Prioritization
+- Response generation
+- Failure handling
+
+---
+
+## Domain Model _(Planned)_
+
+Defines the core business objects used throughout the Advisor.
+
+Examples include:
+
+- User
+- Goal
+- Recommendation
+- Financial Story
+- Behavior Profile
+- Operating Mode
+- Evidence
+- Risk
+- Opportunity
+
+---
+
+## Core Data Objects _(Planned)_
+
+Defines the structure and relationships of the Advisor's primary data models.
+
+---
+
+## Engine Interfaces _(Planned)_
+
+Defines the public interfaces and responsibilities of each Advisor component.
+
+---
+
+## Sequence Diagrams _(Planned)_
+
+Documents the flow of major Advisor scenarios from user request through response.
+
+---
+
+## Advisor Architecture Blueprint _(Planned)_
+
+Combines the architectural documents into a single implementation guide for the Advisor.
+
+---
+
+# Recommended Reading Order
+
+1. Advisor Intelligence Specification (AIS)
+2. Advisor System Architecture
+3. Recommendation Pipeline
+4. Domain Model
+5. Core Data Objects
+6. Engine Interfaces
+7. Sequence Diagrams
+8. Advisor Architecture Blueprint
+
+---
+
+# Relationship to Other Documentation
+
+The Advisor documentation transforms the philosophical principles defined in the Foundation into an implementation-ready software architecture.
+
+```
+Foundation
+        ↓
+Advisor Intelligence Specification
+        ↓
+Advisor System Architecture
+        ↓
+Recommendation Pipeline
+        ↓
+Domain Model
+        ↓
+Core Data Objects
+        ↓
+Engine Interfaces
+        ↓
+Sequence Diagrams
+        ↓
+Advisor Architecture Blueprint
+        ↓
+Implementation
+```
+
+---
+
+# Guiding Principle
+
+The Advisor should be designed as a modular, transparent, and evidence-driven system where each component has a clearly defined responsibility.
+
+Every architectural decision should faithfully implement the Advisor Intelligence Specification while remaining scalable, maintainable, and extensible for future versions of Financial Friday.

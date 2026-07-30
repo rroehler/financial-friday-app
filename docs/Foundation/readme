@@ -1,0 +1,89 @@
+# Foundation
+
+## Purpose
+
+The Foundation documents define the principles, vision, and long-term direction of Financial Friday.
+
+These documents answer **why** Financial Friday exists, **what** it aims to become, and **how** development decisions should be evaluated. They serve as the philosophical foundation for every architectural and implementation decision made throughout the project.
+
+Changes to these documents should be made thoughtfully, as they influence every other aspect of the system.
+
+---
+
+# Documents
+
+## Constitution
+
+Defines the core principles and values that govern Financial Friday.
+
+Topics include:
+
+- Core beliefs
+- Design philosophy
+- User-first principles
+- Transparency
+- Trust
+- Long-term decision making
+- Ethical standards
+
+---
+
+## Vision & Mission
+
+Defines the long-term vision of Financial Friday and the mission that guides development.
+
+Topics include:
+
+- Product vision
+- Mission statement
+- Success criteria
+- Guiding philosophy
+- Long-term objectives
+
+---
+
+## Roadmap
+
+Provides the high-level development plan for Financial Friday.
+
+Topics include:
+
+- Project milestones
+- Version objectives
+- Major deliverables
+- Long-term direction
+- Future releases
+
+---
+
+# Recommended Reading Order
+
+1. Constitution
+2. Vision & Mission
+3. Roadmap
+
+---
+
+# Relationship to Other Documentation
+
+The Foundation documents establish the philosophy of Financial Friday.
+
+They are followed by the Advisor documentation, which translates these principles into the design and behavior of the Financial Friday Advisor.
+
+```
+Foundation
+        ↓
+Advisor Intelligence Specification
+        ↓
+Advisor System Architecture
+        ↓
+Recommendation Pipeline
+        ↓
+Implementation
+```
+
+---
+
+# Guiding Principle
+
+Every architectural decision, feature, and recommendation produced by Financial Friday should remain consistent with the principles established in these Foundation documents.
